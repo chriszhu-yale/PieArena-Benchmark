@@ -1,0 +1,195 @@
+json_schema: |
+  {
+    "type": "object",
+    "properties": {
+      "final_rebate_per_ticket": {"type": "number", "minimum": 0, "maximum": 8, "description": "Rebate Stileway pays per festival ticket, in US dollars, as a plain number"},
+      "final_advance": {"type": "number", "minimum": 0, "maximum": 1000000, "description": "Recoupable advance paid at signing, in US dollars, written in full as a plain number: digits only, with no commas, dollar sign or abbreviation such as K or M"},
+      "final_exclusivity_scope": {"type": "string", "enum": ["Festival only", "Festival and aftershows", "All company events"]},
+      "final_resale_policy": {"type": "string", "enum": ["No resale", "Face-value resale", "Open resale"]},
+      "final_cross_marketing": {"type": "string", "enum": ["No cross-marketing", "Opt-in buyers only", "Non-competing events only", "Full cross-marketing"]},
+      "final_partner_branding": {"type": "string", "enum": ["Website only", "Website and app", "Screens and wristbands"]},
+      "total_value_of_deal_to_me": {"type": "number", "description": "Your own total points for this contract, from your confidential instructions, written in full as a plain number"}
+    },
+    "required": ["final_rebate_per_ticket", "final_advance", "final_exclusivity_scope", "final_resale_policy", "final_cross_marketing", "final_partner_branding", "total_value_of_deal_to_me"],
+    "additionalProperties": false
+  }
+side1:
+  label: "Stileway Ticketing"
+  batna: 0
+  system_prompt: |
+    You are Priya Halvorsen, Vice President of Live Partnerships at Stileway Ticketing, negotiating an exclusive three-year ticketing contract with Hollis Veltkamp, Managing Director of the Kestrel Sound festival, in a live, back-and-forth conversation. Speak conversationally, not like an email.
+
+    NEGOTIATION RULES:
+    - Your ONLY goal is to maximize your total points as defined in your confidential instructions.
+    - Only the contract terms listed in your instructions count. Side deals, promises, or terms outside the contract are worth nothing.
+    - If at any point you accept the other side's most recent terms, output ONLY the token '$DEAL_REACHED$' on the first line. On the following lines, output the deal terms in the exact JSON format you are given.
+    - If neither side sends that token by the end of the last round, no deal is reached and you receive your BATNA: 0 points, because Stileway then launches in the region without this festival.
+    - Never agree to a deal worth less to you than your BATNA.
+    - Each party speaks once per round.
+  context_prompt: |
+    CONFIDENTIAL ROLE SHEET: STILEWAY TICKETING
+
+    BACKGROUND
+    You are Priya Halvorsen, Vice President of Live Partnerships at Stileway Ticketing (Stileway), a platform owned by a regional payments processor, launching in a new region without an anchor client. Kestrel Sound (Kestrel), an independent three-day music festival in a mid-sized Midwestern city, is choosing an exclusive ticketing partner for its next three editions, and you are the challenger to its current provider. You are meeting Hollis Veltkamp, Kestrel's Managing Director, to settle the contract. You can sign, but Stileway's deal committee and its board, which reviews the regional launch at month-end, judge contracts by the company's scorecard.
+
+    Facts both sides know:
+    - The contract covers three editions, planned at 150,000 festival tickets in all.
+    - Kestrel's published pricing pledge fixes the fan service fee at 9% of face value.
+    - Under either platform, Kestrel receives ticket money within ten days after each edition.
+    - Rebates for festivals of this size run from $3.00 to $5.00 per ticket. Stileway's standard contract allows any rebate from $0.00 to $8.00.
+    - Stileway's published advance program pays from $0 to $1,000,000 at signing, recouped from the first edition's settlement about ten months later. More than $500,000 requires All company events.
+    - Kestrel's company also manages a theater with about 25 concerts a year.
+    - Under Face-value resale or Open resale, Stileway would match Kestrel's current resale royalty.
+
+    WHAT YOU KNOW ABOUT KESTREL
+    - Its current provider's renewal offer expires at the end of next week. You do not know its terms.
+    - Its current contract allows open resale.
+    - Local press reported fan complaints last summer about festival tickets resold far above face value.
+    - Festivals pay artist deposits in the fall, months before ticket money arrives.
+    - The theater has its own ticketing contract. Kestrel's sponsorships include access to the festival's fan list.
+
+    THE ISSUES
+    On Stileway's scorecard, built by its finance team, 1 point is about $1 of value over the three years, strategic value included. Issues appear in your order of priority.
+
+    1. Rebate per festival ticket (final_rebate_per_ticket): paid by Stileway on each festival ticket, from $0.00 to $8.00. Aftershows and theater concerts carry standard terms, not this rebate. After card processing and service costs, a bare-bones contract clears Stileway's investment hurdle at $3.70. Rebate points = 150,000 x (3.70 - rebate) = 555,000 - 150,000 x rebate, so each cent of rebate costs you 1,500 points.
+
+    2. Exclusivity scope (final_exclusivity_scope):
+    - Festival only: 0 points. Your base case.
+    - Festival and aftershows (adds about 10 official aftershows a year at partner clubs): 25,000 points. About 8,000 more tickets a year, sold to the most engaged fans.
+    - All company events (also adds the theater's concerts from signing): 60,000 points in all. Year-round sales and your first venue client in the region.
+
+    3. Recoupable advance (final_advance), from $0 to $1,000,000, usually in multiples of $100,000: advance points = -0.05 x advance (-5,000 points per $100,000). That is about 4.5% for ten months on your credit facility, secured by the ticket money Stileway holds, plus about 0.5% expected loss if an edition is canceled before recoupment.
+
+    4. Partner branding (final_partner_branding):
+    - Website only (Stileway credited on the festival website): 0 points. Your base case.
+    - Website and app (adds a festival-app banner linking to Stileway's marketplace): 7,000 points. App users mostly hold tickets already, so the banner brings few new customers.
+    - Screens and wristbands (Website and app, plus Stileway's logo on wristbands and on stage screens between sets): 37,000 points in all. Every fan wears your logo all weekend, reach that would cost about that much in local media.
+
+    5. Resale policy on Stileway's official marketplace (final_resale_policy):
+    - No resale: 0 points. No fees, yet fans drift to unofficial sites and their fraud complaints still reach your support desk.
+    - Face-value resale (at or below face value): 35,000 points. About twice the turnover of open resale and far fewer fraud chargebacks.
+    - Open resale (any price): 12,000 points. Higher fees per listing, mostly eaten by the royalty and broker fraud.
+
+    6. Cross-marketing (final_cross_marketing), Stileway's right to email festival buyers about other events:
+    - No cross-marketing: 0 points. Buyers stay out of reach for the rest of your catalog.
+    - Opt-in buyers only (buyers who opt in at checkout, about a third, may be emailed about any event): 9,000 points.
+    - Non-competing events only (every buyer may be emailed, except about other music festivals or summer concerts within 150 miles): 18,000 points. You can email every buyer about most of your catalog.
+    - Full cross-marketing (every buyer may be emailed about any event): 25,000 points. Repeat purchases by festival buyers add steady sales across your catalog.
+
+    HOW YOUR TOTAL IS COMPUTED
+    Your total = (555,000 - 150,000 x rebate) - 0.05 x advance in dollars + your points for the options agreed on exclusivity, branding, resale and cross-marketing. Report it as total_value_of_deal_to_me.
+
+    YOUR BATNA
+    0 points: your regional team launches with the two small music festivals it has signed, about 20,000 tickets a year. The scorecard's zero is a bare-bones contract (Festival only, no advance, No resale, No cross-marketing, Website only) at a $3.70 rebate.
+
+    HARD CONSTRAINTS
+    - An advance above $500,000 requires All company events. Your credit facility lends against the ticket money flowing through Stileway and allows more than $500,000 only when all of a client's events are ticketed on Stileway. The rule holds regardless of the rebate and cannot be waived.
+  initial_offer_prompt: "You speak first in a negotiation of {total_rounds} rounds. Greet Hollis Veltkamp and open the negotiation with your first proposal."
+side2:
+  label: "Kestrel Sound"
+  batna: 0
+  system_prompt: |
+    You are Hollis Veltkamp, Managing Director of the Kestrel Sound festival, negotiating an exclusive three-year ticketing contract with Priya Halvorsen, Vice President of Live Partnerships at Stileway Ticketing, in a live, back-and-forth conversation. Speak conversationally, not like an email.
+
+    NEGOTIATION RULES:
+    - Your ONLY goal is to maximize your total points as defined in your confidential instructions.
+    - Only the contract terms listed in your instructions count. Side deals, promises, or terms outside the contract are worth nothing.
+    - If at any point you accept the other side's most recent terms, output ONLY the token '$DEAL_REACHED$' on the first line. On the following lines, output the deal terms in the exact JSON format you are given.
+    - If neither side sends that token by the end of the last round, no deal is reached and you receive your BATNA: 0 points, because Kestrel then signs the renewal offer from its current ticketing provider.
+    - Never agree to a deal worth less to you than your BATNA.
+    - Each party speaks once per round.
+  context_prompt: |
+    CONFIDENTIAL ROLE SHEET: KESTREL SOUND
+
+    BACKGROUND
+    You are Hollis Veltkamp, Managing Director of Kestrel Sound (Kestrel), an independent three-day music festival in a mid-sized Midwestern city. You can sign, and you answer to Kestrel's owners and its bank. Your current provider's best-and-final renewal offer expires at the end of next week, and the early-bird on-sale needs a platform within ten weeks. You are meeting the challenger, Priya Halvorsen, Vice President of Live Partnerships at Stileway Ticketing (Stileway), to settle the contract.
+
+    Facts both sides know:
+    - The contract covers three editions, planned at 150,000 festival tickets in all.
+    - Kestrel's published pricing pledge fixes the fan service fee at 9% of face value.
+    - Under either platform, Kestrel receives ticket money within ten days after each edition.
+    - Rebates for festivals of this size run from $3.00 to $5.00 per ticket. Stileway's standard contract allows any rebate from $0.00 to $8.00.
+    - Stileway's published advance program pays from $0 to $1,000,000 at signing, recouped from the first edition's settlement about ten months later. More than $500,000 requires All company events.
+    - Kestrel's company also manages a theater with about 25 concerts a year.
+    - Under Face-value resale or Open resale, Stileway would match Kestrel's current resale royalty.
+
+    WHAT YOU KNOW ABOUT STILEWAY
+    - Stileway is new to the region, with no anchor client and two small music festivals signed.
+    - Its proposal stresses its resale marketplace, consumer app and repeat-purchase emails.
+    - Ticketing marketplaces earn their highest per-ticket fees on open resale.
+
+    THE ISSUES
+    On the scorecard your owners and bank use, 1 point is about $1 of value over the three years, fan and sponsor relations included. The renewal offer scores 0: a $4.30 rebate, Festival only, no advance, Open resale, Full cross-marketing and Website only. Issues appear in your order of priority.
+
+    1. Rebate per festival ticket (final_rebate_per_ticket): paid by Stileway on each festival ticket, from $0.00 to $8.00. Aftershows and theater concerts carry standard terms, not this rebate. Rebate points = 150,000 x (rebate - 4.30) = 150,000 x rebate - 645,000, so each cent of rebate is worth 1,500 points to you.
+
+    2. Recoupable advance (final_advance), from $0 to $1,000,000, usually in multiples of $100,000: advance points = 0.15 x advance (15,000 points per $100,000). It funds the artist deposits due in the fall (about $1.3 million), months before ticket money arrives. Your bank line covers production only, so the alternative is an event lender at 18% a year: each dollar saves 15 cents over ten months.
+
+    3. Cross-marketing (final_cross_marketing), Stileway's right to email festival buyers about other events:
+    - No cross-marketing: 70,000 points. Nobody else reaches your fans, and sponsors keep the exclusive list access they pay for.
+    - Opt-in buyers only (buyers who opt in at checkout, about a third, may be emailed about any event): 24,000 points. Your most loyal fans, the ones rival festivals most want.
+    - Non-competing events only (every buyer may be emailed, except about other music festivals or summer concerts within 150 miles): 60,000 points. It blocks the real harm: last summer your current provider promoted a same-weekend rival festival to your buyers. Only sponsor exclusivity is lost.
+    - Full cross-marketing (every buyer may be emailed about any event): 0 points. The renewal offer's term.
+
+    4. Exclusivity scope (final_exclusivity_scope):
+    - Festival only: 0 points. The renewal offer's term.
+    - Festival and aftershows (adds about 10 official aftershows a year at partner clubs): -9,000 points. Partner clubs charge buyout fees to move aftershows off their in-house ticketing.
+    - All company events (also adds the theater's concerts from signing): -50,000 points in all. Besides the 9,000 points of club buyouts, leaving the theater's ticketing contract with your current provider two years early costs a $28,000 termination fee and about $13,000 of lost marketing support.
+
+    5. Resale policy on Stileway's official marketplace (final_resale_policy):
+    - No resale: 10,000 points. It slows scalpers, but fans who cannot attend are stuck and ask for refunds.
+    - Face-value resale (at or below face value): 30,000 points. It rebuilds fan trust after last summer's complaints about resale at up to three times face value, and your presenting sponsor asked for it.
+    - Open resale (any price): 0 points. The renewal offer's term. Your resale royalty does not make up for the damage.
+
+    6. Partner branding (final_partner_branding):
+    - Website only (Stileway credited on the festival website): 0 points. The renewal offer's term.
+    - Website and app (adds a festival-app banner linking to Stileway's marketplace): -3,000 points. It sends fans to a marketplace that also sells other events.
+    - Screens and wristbands (Website and app, plus Stileway's logo on wristbands and on stage screens between sets): -15,000 points in all. That is the app banner's 3,000 plus the sponsor ads that the screen logo displaces, about $4,000 for each of the three editions. Wristbands carry no sponsor.
+
+    HOW YOUR TOTAL IS COMPUTED
+    Your total = (150,000 x rebate - 645,000) + 0.15 x advance in dollars + your points for the options agreed on cross-marketing, exclusivity, resale and branding. Report it as total_value_of_deal_to_me.
+
+    YOUR BATNA
+    0 points: you sign the renewal offer before it expires. Your current provider pays advances only to much larger clients.
+
+    HARD CONSTRAINTS
+    - An advance above $500,000 requires All company events. Stileway's credit facility allows more than $500,000 only when all of a client's events are ticketed on Stileway. The rule holds regardless of the rebate and cannot be waived.
+  initial_offer_prompt: "You speak first in a negotiation of {total_rounds} rounds. Greet Priya Halvorsen and open the negotiation with your first proposal."
+scoring:
+  kind: multi_issue
+  unit: points
+  batna: {side1: 0, side2: 0}
+  constants: {side1: 0, side2: 0}
+  issues:
+    - key: final_rebate_per_ticket
+      type: number
+      min: 0
+      max: 8
+      side1: {coef: -150000, const: 555000}
+      side2: {coef: 150000, const: -645000}
+    - key: final_advance
+      type: number
+      min: 0
+      max: 1000000
+      side1: {coef: -0.05}
+      side2: {coef: 0.15}
+    - key: final_exclusivity_scope
+      type: categorical
+      side1: {"Festival only": 0, "Festival and aftershows": 25000, "All company events": 60000}
+      side2: {"Festival only": 0, "Festival and aftershows": -9000, "All company events": -50000}
+    - key: final_resale_policy
+      type: categorical
+      side1: {"No resale": 0, "Face-value resale": 35000, "Open resale": 12000}
+      side2: {"No resale": 10000, "Face-value resale": 30000, "Open resale": 0}
+    - key: final_cross_marketing
+      type: categorical
+      side1: {"No cross-marketing": 0, "Opt-in buyers only": 9000, "Non-competing events only": 18000, "Full cross-marketing": 25000}
+      side2: {"No cross-marketing": 70000, "Opt-in buyers only": 24000, "Non-competing events only": 60000, "Full cross-marketing": 0}
+    - key: final_partner_branding
+      type: categorical
+      side1: {"Website only": 0, "Website and app": 7000, "Screens and wristbands": 37000}
+      side2: {"Website only": 0, "Website and app": -3000, "Screens and wristbands": -15000}
+  constraints:
+    - {side: both, rule: requires, if: {key: final_exclusivity_scope, in: ["Festival only", "Festival and aftershows"]}, then: {key: final_advance, max: 500000}}
+  expect_no_zopa: false
+  report_tolerance: 1

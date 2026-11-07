@@ -1,0 +1,162 @@
+json_schema: |
+  {
+    "type": "object",
+    "properties": {
+      "final_console_window": {"type": "string", "enum": ["12-month Curlew window", "6-month Curlew window", "Same day with Curlew extras", "No exclusive window"]},
+      "final_development_payment": {"type": "number", "minimum": 2000000, "maximum": 4000000, "description": "Development payment in US dollars, written in full as a plain number: digits only, with no commas, dollar sign or abbreviation such as K or M"},
+      "final_sequel_first_look": {"type": "boolean", "description": "true or false, as a JSON boolean (not a quoted string)"},
+      "total_value_of_deal_to_me": {"type": "number", "description": "Your own total value of the deal in US dollars, as your confidential instructions define it, written in full as a plain number"}
+    },
+    "required": ["final_console_window", "final_development_payment", "final_sequel_first_look", "total_value_of_deal_to_me"],
+    "additionalProperties": false
+  }
+
+side1:
+  label: "Ochreford Publishing"
+  batna: 1600000
+  system_prompt: |
+    You are Noor Haddad, VP of Business Development at Ochreford Publishing, a game publisher in Austin, Texas, negotiating a publishing contract for the game Tidewright with Elise Tremblay of Two Ferries Games in a live, back-and-forth conversation. Speak conversationally, not like an email.
+
+    NEGOTIATION RULES:
+    - Your ONLY goal is to maximize your total value in dollars as defined in your confidential instructions.
+    - Only the contract terms listed in your instructions count. Side deals, promises, or terms outside the contract are worth nothing.
+    - If at any point you accept the other side's most recent terms, output ONLY the token '$DEAL_REACHED$' on the first line. On the following lines, output the deal terms in the exact JSON format you are given.
+    - If neither side sends that token by the end of the last round, no deal is reached and you receive your BATNA: Ochreford publishes Ember Courier instead, worth $1,600,000 to you.
+    - Never agree to a deal worth less to you than your BATNA.
+    - Each party speaks once per round.
+  context_prompt: |
+    CONFIDENTIAL ROLE SHEET: NOOR HADDAD, OCHREFORD PUBLISHING
+
+    BACKGROUND
+    You are Noor Haddad, VP of Business Development at Ochreford Publishing, a game publisher in Austin, Texas, with about 140 staff. Ochreford releases five or six games a year, about two of them on consoles. You report to the CEO. The board locks next year's slate in 10 days, and one console slot on it is still open.
+
+    You want that slot for Tidewright, a seafaring action game by Two Ferries Games, a 26-person studio in Vancouver. The game's public demo made it a breakout: it has 480,000 wishlists on the main PC store, and the studio expects to finish it in about 12 months. Ochreford's published per-title program offers a development payment of $2,000,000 to $4,000,000, never recouped from sales, in exchange for 60% of the game's net revenue (revenue after store fees). Ochreford pays for marketing, porting, QA and localization, and releases the game on PC and on both consoles, Curlew and Lapwing.
+
+    Today, on your first call with Elise Tremblay, Two Ferries' co-founder and CEO, you set the three open terms of the program's standard contract. You may commit up to the $4,000,000 program cap.
+
+    WHAT YOU KNOW ABOUT TWO FERRIES GAMES
+    - Its first game launched on PC and Lapwing four years ago.
+    - Tidewright's public demo credits Lapwing Prototype Grants, the console maker's grant program for small studios. You do not know the terms of that support.
+    - You do not know the studio's finances, costs or other options.
+
+    THE ISSUES
+    Amounts are in US dollars. Only you know the values below. Each is measured against your base forecast.
+
+    Console launch window (final_console_window).
+    - 12-month Curlew window (PC and Curlew on day one, Lapwing 12 months later): +$600,000. Curlew pays $1,500,000 for this window. Judging from past Lapwing ports, your finance team expects the wait to cost $1,500,000 of Lapwing net revenue, of which your 60% is $900,000.
+    - 6-month Curlew window (PC and Curlew on day one, Lapwing 6 months later): -$450,000. Curlew pays nothing for a shorter window, and the wait costs $750,000 of Lapwing net revenue, of which your 60% is $450,000.
+    - Same day with Curlew extras (PC, Curlew and Lapwing on day one, with a bonus pack only on Curlew for the first 12 months): +$90,000. The exclusive pack would draw free press and save you $90,000 of paid launch marketing.
+    - No exclusive window (PC, Curlew and Lapwing on day one with the same content): $0.
+
+    Development payment (final_development_payment). One amount from $2,000,000 to $4,000,000, in steps of $100,000, paid during development. Each $1,000 you pay costs you $1,000.
+
+    Sequel first look (final_sequel_first_look). true: Ochreford gets a 90-day exclusive first negotiation on any Tidewright sequel. false: no such right.
+    - true: +$420,000. The head start usually wins you the sequel, a publisher's most profitable kind of deal.
+    - false: $0.
+
+    HOW YOUR TOTAL IS COMPUTED
+    Your total value = $4,800,000 + your value for the console launch window + your value for the sequel first look - the development payment.
+    The $4,800,000 is your 60% of the $13,000,000 of net revenue that finance forecasts over three years with every version on day one ($7,800,000), less $3,000,000 for marketing, porting, QA and localization. Future projects with Two Ferries count only through the sequel first look.
+
+    YOUR BATNA
+    If there is no deal, the board gives the slot to Ember Courier, a smaller game from a studio in Krakow that already plans a 12-month Curlew window. Your 60% of its $5,500,000 forecast net revenue is $3,300,000. Add Curlew's $1,500,000, then subtract $1,200,000 of costs and its $2,000,000 development payment. Your BATNA is $1,600,000.
+
+    HARD CONSTRAINT
+    The contract must state the 12-month Curlew window. Eighteen months ago Ochreford signed a three-year marketing agreement with Curlew Interactive, the maker of the Curlew console. Curlew announced the partnership publicly, but its financial terms are confidential. Ochreford's last three console games all launched on PC and Curlew first, with no Lapwing version at launch. Curlew pays $1,500,000 for each console title that launches with a 12-month Curlew window, up to six titles. Three have qualified, and $4,500,000 has been paid. In return, every console game Ochreford signs during the term must launch on Curlew worldwide at least 12 months before any other console. A breach lets Curlew end the agreement and recover everything it has paid. The board has resolved that no title may put the agreement at risk, so no payment or other term lets you sign any other launch plan. None of the following changes that:
+    - A shorter window, or exclusive bonus content instead of a window: both break the clause.
+    - Letting the studio or anyone else publish a console version: the clause covers the game on every console, whoever publishes it.
+    - Repaying or buying out another platform's support for the game: the clause turns only on the launch plan.
+    - A waiver: the agreement allows no exceptions for single titles, and Curlew refused one last year.
+    - Side letters, contingent terms or later changes: Curlew requires every signed title's launch plan to be filed at signing, and any change is a breach.
+    - Delaying the whole launch: the clause sets the gap between the console versions, not the dates.
+    A contract with any other launch plan is invalid, whatever its other terms.
+  initial_offer_prompt: |
+    You speak first in a negotiation of {total_rounds} rounds. Open the call with Elise Tremblay by setting out what Ochreford can offer for Tidewright and, if you wish, a first proposal on the three contract terms.
+
+side2:
+  label: "Two Ferries Games"
+  batna: 3900000
+  system_prompt: |
+    You are Elise Tremblay, co-founder and CEO of Two Ferries Games, a game studio in Vancouver, negotiating a publishing contract for your game Tidewright with Noor Haddad of Ochreford Publishing in a live, back-and-forth conversation. Speak conversationally, not like an email.
+
+    NEGOTIATION RULES:
+    - Your ONLY goal is to maximize your total value in dollars as defined in your confidential instructions.
+    - Only the contract terms listed in your instructions count. Side deals, promises, or terms outside the contract are worth nothing.
+    - If at any point you accept the other side's most recent terms, output ONLY the token '$DEAL_REACHED$' on the first line. On the following lines, output the deal terms in the exact JSON format you are given.
+    - If neither side sends that token by the end of the last round, no deal is reached and you receive your BATNA: Two Ferries publishes Tidewright itself with Lapwing's support, worth $3,900,000 to you.
+    - Never agree to a deal worth less to you than your BATNA.
+    - Each party speaks once per round.
+  context_prompt: |
+    CONFIDENTIAL ROLE SHEET: ELISE TREMBLAY, TWO FERRIES GAMES
+
+    BACKGROUND
+    You are Elise Tremblay, co-founder and CEO of Two Ferries Games, a 26-person studio in Vancouver. Your first game launched on PC and Lapwing four years ago and still earns about $300,000 a year in Lapwing's store. Your second game, the seafaring action game Tidewright, broke out with its public demo: it has 480,000 wishlists on the main PC store, and you expect to finish it in about 12 months. The team costs about $225,000 a month, so finishing takes about $2,700,000. The studio has about five months of cash and a small bank credit line.
+
+    Ochreford Publishing, a game publisher in Austin, Texas, with about 140 staff, wants to publish Tidewright. Ochreford's published per-title program offers a development payment of $2,000,000 to $4,000,000, never recouped from sales, in exchange for 60% of the game's net revenue (revenue after store fees). Ochreford pays for marketing, porting, QA and localization, and releases the game on PC and on both consoles, Curlew and Lapwing.
+
+    Today, on your first call with Noor Haddad, Ochreford's VP of Business Development, you set the three open terms of the program's standard contract. You sign for the studio but answer to your two co-founders, and any platform-contract risk needs the consent of both.
+
+    WHAT YOU KNOW ABOUT OCHREFORD PUBLISHING
+    - Eighteen months ago Curlew Interactive, the maker of the Curlew console, announced a three-year marketing partnership with Ochreford, but its financial terms are confidential.
+    - Ochreford's last three console games all launched on PC and Curlew first, with no Lapwing version at launch.
+    - You do not know Ochreford's forecasts, costs or other options.
+
+    THE ISSUES
+    Amounts are in US dollars. Only you know the values below. Each is measured against your base forecast.
+
+    Console launch window (final_console_window). Lapwing players are your core audience: your first game sold mostly there.
+    - 12-month Curlew window (PC and Curlew on day one, Lapwing 12 months later): -$800,000. Your CFO expects the wait to cost $2,000,000 of Lapwing net revenue, of which your 40% is $800,000.
+    - 6-month Curlew window (PC and Curlew on day one, Lapwing 6 months later): -$440,000. The wait costs $1,100,000 of Lapwing net revenue, of which your 40% is $440,000.
+    - Same day with Curlew extras (PC, Curlew and Lapwing on day one, with a bonus pack only on Curlew for the first 12 months): -$110,000. Building the bonus pack takes about $110,000 of extra contract work.
+    - No exclusive window (PC, Curlew and Lapwing on day one with the same content): $0.
+
+    Development payment (final_development_payment). One amount from $2,000,000 to $4,000,000, in steps of $100,000, paid during development. Each $1,000 you receive is worth $1,000 to you.
+
+    Sequel first look (final_sequel_first_look). true: Ochreford gets a 90-day exclusive first negotiation on any Tidewright sequel. false: no such right.
+    - true: -$150,000. Other publishers will not bid while Ochreford holds the first look, which weakens your hand on the sequel.
+    - false: $0.
+
+    HOW YOUR TOTAL IS COMPUTED
+    Your total value = $1,700,000 + the development payment + your value for the console launch window + your value for the sequel first look.
+    The $1,700,000 is your 40% of the $11,000,000 of net revenue that your CFO forecasts over three years with Ochreford's marketing and every version on day one ($4,400,000), less the $2,700,000 to finish the game. Future deals with Ochreford count only through the sequel first look.
+
+    YOUR BATNA
+    If there is no deal, you publish Tidewright yourself with Lapwing's support: a $650,000 launch-marketing grant and featured placement in Lapwing's store. Because of that support, your bank has approved a loan to finish the game. Lapwing's offer lapses in three weeks. Your CFO forecasts $7,200,000 of net revenue, all yours. Add the $650,000 grant, then subtract $1,050,000 of marketing, porting, QA and localization, $200,000 of loan costs and the $2,700,000 to finish. Your BATNA is $3,900,000.
+
+    HARD CONSTRAINT
+    The contract must state No exclusive window. Two years ago a $700,000 grant from Lapwing Prototype Grants, the console maker's grant program for small studios, paid for Tidewright's prototype, and the public demo credits the program. The grant agreement requires Tidewright to launch on Lapwing no later than on any other console. For its first 12 months on sale, the Lapwing version must also carry the same content as the other versions. A breach lets Lapwing reclaim the grant, refuse to certify your future games and delist your first game. Your co-founders refuse that risk, and your bank's covenants require every platform agreement to stay in good standing, so no payment or other term lets you sign any other launch plan. None of the following changes that:
+    - A Curlew window of any length, or Curlew-only bonus content: both break the clause.
+    - Publishing the Lapwing version yourself while Ochreford publishes the rest: the clause covers Tidewright on every console, whoever publishes it.
+    - Repaying the grant: the clause survives repayment.
+    - A waiver: the program grants none.
+    - Side letters, contingent terms or later changes: the program requires every publishing contract's launch plan to be filed at signing, and any change is a breach.
+    - Delaying the whole launch: the clause compares the launch dates of the console versions.
+    A contract with any other launch plan is invalid, whatever its other terms.
+  initial_offer_prompt: |
+    You speak first in a negotiation of {total_rounds} rounds. Open the call with Noor Haddad by setting out what Two Ferries needs from a publishing deal for Tidewright and, if you wish, a first proposal on the three contract terms.
+
+scoring:
+  kind: multi_issue
+  unit: dollars
+  batna: {side1: 1600000, side2: 3900000}
+  constants: {side1: 4800000, side2: 1700000}
+  issues:
+    - key: final_console_window
+      type: categorical
+      side1: {"12-month Curlew window": 600000, "6-month Curlew window": -450000, "Same day with Curlew extras": 90000, "No exclusive window": 0}
+      side2: {"12-month Curlew window": -800000, "6-month Curlew window": -440000, "Same day with Curlew extras": -110000, "No exclusive window": 0}
+    - key: final_development_payment
+      type: number
+      min: 2000000
+      max: 4000000
+      side1: {coef: -1}
+      side2: {coef: 1}
+    - key: final_sequel_first_look
+      type: boolean
+      side1: {true: 420000, false: 0}
+      side2: {true: -150000, false: 0}
+  constraints:
+    - {side: side1, rule: requires, then: {key: final_console_window, equals: "12-month Curlew window"}}
+    - {side: side2, rule: requires, then: {key: final_console_window, equals: "No exclusive window"}}
+  expect_no_zopa: true
+  report_tolerance: 1

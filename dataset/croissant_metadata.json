@@ -1,0 +1,2182 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "equivalentProperty": {
+      "@id": "cr:equivalentProperty",
+      "@type": "@vocab"
+    },
+    "samplingRate": "cr:samplingRate",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "name": "PieArena",
+  "description": "PieArena is a benchmark for evaluating language agents in two-party negotiations with private information and deterministic payoffs. The dataset contains LM–LM negotiation transcripts from cross-play and mirror-play in three agentic-harness configurations (base, pro, memory-only), with per-run outcome tables and LLM-judge outputs; the outcome table behind the paper's cross-play leaderboards; and per-session human negotiation data.",
+  "conformsTo": "http://mlcommons.org/croissant/1.1",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "url": "https://doi.org/10.7910/DVN/UYI2O5",
+  "version": "1.1.0",
+  "datePublished": "2026-11-07",
+  "creator": [
+    {
+      "@type": "Person",
+      "name": "Chris Zhu",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Yale University"
+      }
+    },
+    {
+      "@type": "Person",
+      "name": "Sasha Cui",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Yale University"
+      }
+    },
+    {
+      "@type": "Person",
+      "name": "Will Sanok Dufallo",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Yale University"
+      }
+    },
+    {
+      "@type": "Person",
+      "name": "Runzhi Jin",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "UC Berkeley"
+      }
+    },
+    {
+      "@type": "Person",
+      "name": "Zhen Xu",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Yale University"
+      }
+    },
+    {
+      "@type": "Person",
+      "name": "Linjun Zhang",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Rutgers University"
+      }
+    },
+    {
+      "@type": "Person",
+      "name": "Daylian M. Cain",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Yale University"
+      }
+    }
+  ],
+  "keywords": [
+    "language agents",
+    "large language models",
+    "negotiation benchmark",
+    "interactive evaluation",
+    "multi-agent systems",
+    "ranking methodology",
+    "Bradley-Terry-Luce",
+    "behavioral profiling",
+    "human-LM interaction",
+    "agentic scaffolding",
+    "strategic reasoning"
+  ],
+  "rai:dataLimitations": "Two-party negotiations only. Real negotiations may involve payoffs that are harder to quantify than the deterministic payoff functions used here. The human baseline consists of graduate business-school students. Lie rate and perceived reputation come from LLM judges, so residual judge bias may remain. This dataset should not be used to train or fine-tune deceptive or adversarial negotiation agents intended for deployment against real counterparties without their consent. Behavioral profile metrics (especially deception) are research instruments and should not be interpreted as certifications of model trustworthiness for downstream applications.",
+  "rai:dataBiases": "Scenarios are written in English and reflect North American business contexts. The model pool reflects models available through the OpenRouter API at the time of data collection. LLM judges inherit the biases of the judge models. The human baseline is drawn from graduate business-school students.",
+  "rai:personalSensitiveInformation": "No personally identifying information is included. The human data files contain no personal attributes, and human–LM session identifiers are random.",
+  "rai:dataUseCases": "Evaluation research on language agents: ranking them on negotiation skill from the surplus shares they obtain under the scenarios' payoff functions, profiling their negotiation behavior, studying the effect of agentic harnesses, and comparing them with human negotiators.",
+  "rai:dataSocialImpact": "Positive impacts include evaluating the negotiation reasoning, value creation and claiming, and rule compliance of language agents, and analyzing their behavioral patterns. A potential negative impact is misuse of the data to build agents that exploit their counterparts through deceptive or aggressive tactics.",
+  "rai:hasSyntheticData": true,
+  "prov:wasDerivedFrom": [
+    {
+      "@id": "https://openrouter.ai/api",
+      "prov:label": "OpenRouter API",
+      "sc:description": "Language-model inference endpoints used to generate the LM–LM negotiation transcripts."
+    }
+  ],
+  "prov:wasGeneratedBy": [
+    {
+      "@type": "prov:Activity",
+      "prov:type": {
+        "@id": "https://www.wikidata.org/wiki/Q4929239"
+      },
+      "prov:label": "LM-LM transcript collection",
+      "sc:description": "Pairwise language-model negotiations run through the OpenRouter API with six rounds per negotiation. Each side has private preferences, a BATNA and a contract schema; models exchange free-form messages and file a structured JSON contract on agreement. Cross-play and mirror-play runs in three agentic-harness configurations: base (no scaffolding), pro (state tracking and planning) and memory-only (state tracking only). Each run file records the models of both sides."
+    },
+    {
+      "@type": "prov:Activity",
+      "prov:type": {
+        "@id": "https://www.wikidata.org/wiki/Q4929239"
+      },
+      "prov:label": "Human session collection",
+      "sc:description": "Human negotiation data collected in graduate business-school negotiation courses, with informed consent: human–LM sessions through a web application (Main Street, Hire Talent), and human–human SnyderMed negotiations, whose final deal terms the students reported."
+    },
+    {
+      "@type": "prov:Activity",
+      "prov:type": {
+        "@id": "https://www.wikidata.org/wiki/Q5227332"
+      },
+      "prov:label": "Preprocessing",
+      "sc:description": "Per-pair outcome tables and judge outputs aligned one-to-one with the run files, with a column marking the runs used in the analyses of the paper's main results. Human session data with personal identifiers removed and random session identifiers."
+    },
+    {
+      "@type": "prov:Activity",
+      "prov:type": {
+        "@id": "https://www.wikidata.org/wiki/Q109719325"
+      },
+      "prov:label": "Behavioral annotation (LLM-as-judge)",
+      "sc:description": "LLM judges score full transcripts for two of the six behavioral metrics (lie rate, perceived reputation); the judge prompts are in the code repository, and each judge output records its judge model. Inter-judge agreement was assessed across a panel of judge models. The other four metrics (deal rate, BATNA compliance, output validity, numerical accuracy) are computed deterministically from the structured contracts and payoff functions."
+    }
+  ],
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "readme",
+      "name": "README.md",
+      "description": "Human-readable dataset documentation.",
+      "contentUrl": "README.md",
+      "encodingFormat": "text/markdown",
+      "sha256": "1348cf25e8e0602823294ba536a55638ddd9edbe79c10e3104420c23e253d45e"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "license",
+      "name": "LICENSE",
+      "description": "License file (CC BY 4.0).",
+      "contentUrl": "LICENSE",
+      "encodingFormat": "text/plain",
+      "sha256": "0bec14fd6397b0f38af2d25236e658745b3bd68f085feee283211abbaed5ab04"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "transcripts_zip",
+      "name": "lm_data_transcripts.zip",
+      "description": "Archive of lm_data/transcripts/ (run files, per-pair tables and judge outputs). Unzip it in the dataset folder to obtain the files described by the transcript FileSets.",
+      "contentUrl": "lm_data_transcripts.zip",
+      "encodingFormat": "application/zip",
+      "sha256": "0265b9fc00046b7f05524ac8e20e0d59c3f6251acc992dfb4253edb91df02e85"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "transcripts",
+      "name": "lm_transcripts",
+      "description": "LM–LM negotiation transcripts organized by play_type / mode / scenario / pair.",
+      "encodingFormat": "application/json",
+      "includes": "lm_data/transcripts/*/*/*/*/run_*.json"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "pair_runs_tables",
+      "name": "pair_runs_tables",
+      "description": "Per-pair run tables (one row per run file: pie shares, deal status, validity, BATNA compliance, self-reported payoff accuracy, lie counts, paper_analysis flag).",
+      "encodingFormat": "text/csv",
+      "includes": "lm_data/transcripts/*/*/*/*/pair_runs_table.csv"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "reputation_scores",
+      "name": "reputation_scores",
+      "description": "Per-pair reputation-judge scores (five sub-dimensions per side), one row per run.",
+      "encodingFormat": "text/csv",
+      "includes": "lm_data/transcripts/*/*/*/*/reputation_score.csv"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "lies_reports",
+      "name": "lies_reports",
+      "description": "Per-pair lie-judge records (one JSON object per run).",
+      "encodingFormat": "application/jsonlines",
+      "includes": "lm_data/transcripts/*/*/*/*/lies_report.jsonl"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "paper_crossplay_outcomes",
+      "name": "paper_crossplay_outcomes.csv",
+      "description": "Outcomes recorded for the balanced cross-play design behind the paper's leaderboards, keyed by pair folder and run number.",
+      "contentUrl": "lm_data/paper_crossplay_outcomes.csv",
+      "encodingFormat": "text/csv",
+      "sha256": "82c1f586a8f34bd026b682d2cd068b67b49605118ba5b90f5a376c8102245014"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "main_street_sessions",
+      "name": "main_street_sessions.csv",
+      "description": "Per-session human–LM Main Street negotiation data (no personal identifiers).",
+      "contentUrl": "human_data/main_street_sessions.csv",
+      "encodingFormat": "text/csv",
+      "sha256": "93907218e15cd1f911ac28c2f5a5b486f9ab1758033abb308c6d976c6360ccde"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "hire_talent_sessions",
+      "name": "hire_talent_sessions.csv",
+      "description": "Per-session human–LM Hire Talent negotiation data (no personal identifiers).",
+      "contentUrl": "human_data/hire_talent_sessions.csv",
+      "encodingFormat": "text/csv",
+      "sha256": "77f09deb07d47024808bc787485a6ca55158ef13eff5890bd1e7b22a4078cb84"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "snydermed_human_human",
+      "name": "snydermed_human_human.csv",
+      "description": "Per-session human–human SnyderMed mirror-play outcomes (no personal identifiers).",
+      "contentUrl": "human_data/snydermed_human_human.csv",
+      "encodingFormat": "text/csv",
+      "sha256": "baa71366a8db51366676b94fb7a5c0a35962190f006989600b7c021f2854e864"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "pair_runs",
+      "name": "pair_runs",
+      "description": "One row per LM–LM run: outcome, validity, payoff accuracy, lie counts, and the paper_analysis flag.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/scenario",
+          "name": "scenario",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "scenario"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/pairing",
+          "name": "pairing",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "pairing"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/run_number",
+          "name": "run_number",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "run_number"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/who_first",
+          "name": "who_first",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "who_first"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side1_label",
+          "name": "side1_label",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side1_label"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side1_model",
+          "name": "side1_model",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side1_model"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side2_label",
+          "name": "side2_label",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side2_label"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side2_model",
+          "name": "side2_model",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side2_model"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/verified_agreement",
+          "name": "verified_agreement",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "verified_agreement"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/misunderstanding",
+          "name": "misunderstanding",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "misunderstanding"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/first_deal_side",
+          "name": "first_deal_side",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "first_deal_side"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/both_reached",
+          "name": "both_reached",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "both_reached"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/turns_to_deal",
+          "name": "turns_to_deal",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "turns_to_deal"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side1_value",
+          "name": "side1_value",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side1_value"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side2_value",
+          "name": "side2_value",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side2_value"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/total_pie",
+          "name": "total_pie",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "total_pie"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/p_i",
+          "name": "p_i",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "p_i"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/p_j",
+          "name": "p_j",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "p_j"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side1_used_json_fixer",
+          "name": "side1_used_json_fixer",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side1_used_json_fixer"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side2_used_json_fixer",
+          "name": "side2_used_json_fixer",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side2_used_json_fixer"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side1_value_correct",
+          "name": "side1_value_correct",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side1_value_correct"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side2_value_correct",
+          "name": "side2_value_correct",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side2_value_correct"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side1_signed_error",
+          "name": "side1_signed_error",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side1_signed_error"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side2_signed_error",
+          "name": "side2_signed_error",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side2_signed_error"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/all_valid",
+          "name": "all_valid",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "all_valid"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side1_above_batna",
+          "name": "side1_above_batna",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side1_above_batna"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side2_above_batna",
+          "name": "side2_above_batna",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side2_above_batna"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/memory_agent",
+          "name": "memory_agent",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "memory_agent"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/plan_agent",
+          "name": "plan_agent",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "plan_agent"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side1_lie_count",
+          "name": "side1_lie_count",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side1_lie_count"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/side2_lie_count",
+          "name": "side2_lie_count",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "side2_lie_count"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/liar_judge_fallback",
+          "name": "liar_judge_fallback",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "liar_judge_fallback"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "pair_runs/paper_analysis",
+          "name": "paper_analysis",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileSet": {
+              "@id": "pair_runs_tables"
+            },
+            "extract": {
+              "column": "paper_analysis"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "reputation",
+      "name": "reputation",
+      "description": "One row per LM–LM run: reputation-judge scores of each side.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/play_type",
+          "name": "play_type",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "play_type"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/mode",
+          "name": "mode",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "mode"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/scenario",
+          "name": "scenario",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "scenario"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/pairing",
+          "name": "pairing",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "pairing"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/run_number",
+          "name": "run_number",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "run_number"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/side1_label",
+          "name": "side1_label",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "side1_label"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/side1_model",
+          "name": "side1_model",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "side1_model"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/side2_label",
+          "name": "side2_label",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "side2_label"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/side2_model",
+          "name": "side2_model",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "side2_model"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/who_first",
+          "name": "who_first",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "who_first"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/verified_agreement",
+          "name": "verified_agreement",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "verified_agreement"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/turns_to_deal",
+          "name": "turns_to_deal",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "turns_to_deal"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/side1_value",
+          "name": "side1_value",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "side1_value"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/side2_value",
+          "name": "side2_value",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "side2_value"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/model1_integrity",
+          "name": "model1_integrity",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "model1_integrity"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/model1_reliability",
+          "name": "model1_reliability",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "model1_reliability"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/model1_reciprocity",
+          "name": "model1_reciprocity",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "model1_reciprocity"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/model1_collaboration",
+          "name": "model1_collaboration",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "model1_collaboration"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/model1_conduct",
+          "name": "model1_conduct",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "model1_conduct"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/model1_reputation_avg",
+          "name": "model1_reputation_avg",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "model1_reputation_avg"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/model2_integrity",
+          "name": "model2_integrity",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "model2_integrity"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/model2_reliability",
+          "name": "model2_reliability",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "model2_reliability"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/model2_reciprocity",
+          "name": "model2_reciprocity",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "model2_reciprocity"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/model2_collaboration",
+          "name": "model2_collaboration",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "model2_collaboration"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/model2_conduct",
+          "name": "model2_conduct",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "model2_conduct"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/model2_reputation_avg",
+          "name": "model2_reputation_avg",
+          "dataType": "sc:Float",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "model2_reputation_avg"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/scored_at",
+          "name": "scored_at",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "scored_at"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "reputation/judge_model",
+          "name": "judge_model",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "reputation_scores"
+            },
+            "extract": {
+              "column": "judge_model"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "paper_crossplay",
+      "name": "paper_crossplay",
+      "description": "Outcomes of the balanced cross-play design behind the paper's leaderboards, keyed by mode, scenario, pair folder, and run number.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/mode",
+          "name": "mode",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "mode"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/scenario",
+          "name": "scenario",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "scenario"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/pair",
+          "name": "pair",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "pair"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/run_number",
+          "name": "run_number",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "run_number"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/who_first",
+          "name": "who_first",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "who_first"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/side1_model",
+          "name": "side1_model",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "side1_model"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/side2_model",
+          "name": "side2_model",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "side2_model"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/verified_agreement",
+          "name": "verified_agreement",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "verified_agreement"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/misunderstanding",
+          "name": "misunderstanding",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "misunderstanding"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/all_valid",
+          "name": "all_valid",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "all_valid"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/turns_to_deal",
+          "name": "turns_to_deal",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "turns_to_deal"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/side1_value",
+          "name": "side1_value",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "side1_value"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/side2_value",
+          "name": "side2_value",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "side2_value"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/total_pie",
+          "name": "total_pie",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "total_pie"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/p_i",
+          "name": "p_i",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "p_i"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/p_j",
+          "name": "p_j",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "p_j"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/side1_value_correct",
+          "name": "side1_value_correct",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "side1_value_correct"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/side2_value_correct",
+          "name": "side2_value_correct",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "side2_value_correct"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/side1_signed_error",
+          "name": "side1_signed_error",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "side1_signed_error"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/side2_signed_error",
+          "name": "side2_signed_error",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "side2_signed_error"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/side1_above_batna",
+          "name": "side1_above_batna",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "side1_above_batna"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/side2_above_batna",
+          "name": "side2_above_batna",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "side2_above_batna"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/side1_lie_count",
+          "name": "side1_lie_count",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "side1_lie_count"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/side2_lie_count",
+          "name": "side2_lie_count",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "side2_lie_count"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "paper_crossplay/transcript_consistent",
+          "name": "transcript_consistent",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileObject": {
+              "@id": "paper_crossplay_outcomes"
+            },
+            "extract": {
+              "column": "transcript_consistent"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "human_lm_main_street",
+      "name": "human_lm_main_street",
+      "description": "One row per human–LM Main Street session.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/session_id",
+          "name": "session_id",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "session_id"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/scenario_name",
+          "name": "scenario_name",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "scenario_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/student_role",
+          "name": "student_role",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "student_role"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/ai_role",
+          "name": "ai_role",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "ai_role"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/ai_model",
+          "name": "ai_model",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "ai_model"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/student_goes_first",
+          "name": "student_goes_first",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "student_goes_first"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/use_memory",
+          "name": "use_memory",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "use_memory"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/use_plan",
+          "name": "use_plan",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "use_plan"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/total_rounds",
+          "name": "total_rounds",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "total_rounds"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/deal_reached",
+          "name": "deal_reached",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "deal_reached"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/deal_failed",
+          "name": "deal_failed",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "deal_failed"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/status",
+          "name": "status",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "status"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/student_true_points",
+          "name": "student_true_points",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "student_true_points"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/ai_true_points",
+          "name": "ai_true_points",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "ai_true_points"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/total_points",
+          "name": "total_points",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "total_points"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/student_share",
+          "name": "student_share",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "student_share"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/verified_agreement",
+          "name": "verified_agreement",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "verified_agreement"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_main_street/balanced_subset",
+          "name": "balanced_subset",
+          "description": "1 if the session is in the double-balanced subset used for the paper's primary human–LM analyses, 0 otherwise",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "main_street_sessions"
+            },
+            "extract": {
+              "column": "balanced_subset"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "human_lm_hire_talent",
+      "name": "human_lm_hire_talent",
+      "description": "One row per human–LM Hire Talent session.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/session_id",
+          "name": "session_id",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "session_id"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/student_role",
+          "name": "student_role",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "student_role"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/ai_role",
+          "name": "ai_role",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "ai_role"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/ai_model",
+          "name": "ai_model",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "ai_model"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/student_goes_first",
+          "name": "student_goes_first",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "student_goes_first"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/use_memory",
+          "name": "use_memory",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "use_memory"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/use_plan",
+          "name": "use_plan",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "use_plan"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/total_rounds",
+          "name": "total_rounds",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "total_rounds"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/deal_reached",
+          "name": "deal_reached",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "deal_reached"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/deal_failed",
+          "name": "deal_failed",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "deal_failed"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/status",
+          "name": "status",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "status"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/student_true_points",
+          "name": "student_true_points",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "student_true_points"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/ai_true_points",
+          "name": "ai_true_points",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "ai_true_points"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/total_points",
+          "name": "total_points",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "total_points"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/student_share",
+          "name": "student_share",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "student_share"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/verified_agreement",
+          "name": "verified_agreement",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "verified_agreement"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_lm_hire_talent/balanced_subset",
+          "name": "balanced_subset",
+          "description": "1 if the session is in the double-balanced subset used for the paper's primary human–LM analyses, 0 otherwise",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "hire_talent_sessions"
+            },
+            "extract": {
+              "column": "balanced_subset"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "human_human_snydermed",
+      "name": "human_human_snydermed",
+      "description": "One row per agreed human–human SnyderMed contract.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "human_human_snydermed/total_salary",
+          "name": "total_salary",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "snydermed_human_human"
+            },
+            "extract": {
+              "column": "total_salary"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_human_snydermed/start_date",
+          "name": "start_date",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "snydermed_human_human"
+            },
+            "extract": {
+              "column": "start_date"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_human_snydermed/division",
+          "name": "division",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "snydermed_human_human"
+            },
+            "extract": {
+              "column": "division"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_human_snydermed/city",
+          "name": "city",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "snydermed_human_human"
+            },
+            "extract": {
+              "column": "city"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_human_snydermed/housing_bonus",
+          "name": "housing_bonus",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "snydermed_human_human"
+            },
+            "extract": {
+              "column": "housing_bonus"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_human_snydermed/signing_bonus",
+          "name": "signing_bonus",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "snydermed_human_human"
+            },
+            "extract": {
+              "column": "signing_bonus"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_human_snydermed/side1_value",
+          "name": "side1_value",
+          "description": "Recruiter's surplus over its BATNA.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "snydermed_human_human"
+            },
+            "extract": {
+              "column": "side1_value"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_human_snydermed/side2_value",
+          "name": "side2_value",
+          "description": "Candidate's surplus over its BATNA.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "snydermed_human_human"
+            },
+            "extract": {
+              "column": "side2_value"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_human_snydermed/total_pie",
+          "name": "total_pie",
+          "description": "Sum of the two surpluses.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "snydermed_human_human"
+            },
+            "extract": {
+              "column": "total_pie"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_human_snydermed/normalized_total_pie",
+          "name": "normalized_total_pie",
+          "description": "Total pie divided by the largest achievable total pie.",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "snydermed_human_human"
+            },
+            "extract": {
+              "column": "normalized_total_pie"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "human_human_snydermed/all_valid",
+          "name": "all_valid",
+          "description": "Whether the contract satisfies the hard constraints.",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileObject": {
+              "@id": "snydermed_human_human"
+            },
+            "extract": {
+              "column": "all_valid"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "citeAs": "@inproceedings{zhu2026piearena, title={PieArena: Ranking and Profiling Language Agents in Realistic Negotiation Scenarios}, author={Zhu, Chris and Cui, Sasha and Sanok Dufallo, Will and Jin, Runzhi and Xu, Zhen and Zhang, Linjun and Cain, Daylian M.}, booktitle={Advances in Neural Information Processing Systems}, year={2026}}"
+}

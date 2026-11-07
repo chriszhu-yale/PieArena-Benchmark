@@ -1,0 +1,24 @@
+total_salary,start_date,division,city,housing_bonus,signing_bonus,side1_value,side2_value,total_pie,normalized_total_pie,all_valid
+68000,Fifteenth of month (prospect takes vacation),Division R,Shanghai,0,7500,14000.0,52500.0,66500.0,0.93006993007,True
+60000,Fifteenth of month (prospect takes vacation),Division R,Las Vegas,0,5000,4500.0,46500.0,51000.0,0.713286713287,True
+45000,Fifteenth of month (prospect takes vacation),Division R,Paris,0,5000,29500.0,29000.0,58500.0,0.818181818182,True
+68000,Fifteenth of month (prospect takes vacation),Division R,Shanghai,0,0,22000.0,43500.0,65500.0,0.916083916084,True
+68250,Fifteenth of month (prospect takes vacation),Division R,Shanghai,0,15000,6250.0,61750.0,68000.0,0.951048951049,True
+51000,Fifteenth of month (prospect takes vacation),Division R,Paris,8000,5000,16300.0,43000.0,59300.0,0.829370629371,True
+75000,Fifteenth of month (prospect takes vacation),Division R,Montreal,0,0,0.0,54500.0,54500.0,0.762237762238,True
+60000,Fifteenth of month (prospect takes vacation),Division R,Paris,0,10000,9500.0,50000.0,59500.0,0.832167832168,True
+35000,Fifteenth of month (prospect takes vacation),Division R,Montreal,5000,15000,20000.0,37500.0,57500.0,0.804195804196,True
+17000,Fifteenth of month (prospect takes vacation),Division R,Paris,2000,5000,55700.0,3000.0,58700.0,0.820979020979,True
+55000,Fifteenth of month (prospect takes vacation),Division R,Montreal,0,0,20000.0,34500.0,54500.0,0.762237762238,True
+30000,First of month (no vacation for prospect),Division R,Montreal,5000,15000,35000.0,25000.0,60000.0,0.839160839161,True
+60000,First of month (no vacation for prospect),Division R,Shanghai,10000,15000,15500.0,56000.0,71500.0,1.0,True
+50000,Fifteenth of month (prospect takes vacation),Division R,Shanghai,10000,10000,20500.0,47500.0,68000.0,0.951048951049,True
+52000,Fifteenth of month (prospect takes vacation),Division R,Paris,0,0,28000.0,30000.0,58000.0,0.811188811189,True
+60000,Fifteenth of month (prospect takes vacation),Division R,Shanghai,10000,10000,10500.0,57500.0,68000.0,0.951048951049,True
+120000,Fifteenth of month (prospect takes vacation),Division R,Shanghai,10000,0,-39000.0,105500.0,66500.0,0.93006993007,True
+90000,First of month (no vacation for prospect),Division R,Paris,3000,5000,-8200.0,69500.0,61300.0,0.857342657343,True
+50000,Fifteenth of month (prospect takes vacation),Division R,Shanghai,8250,10000,22075.0,45750.0,67825.0,0.948601398601,True
+60500,First of month (no vacation for prospect),Division R,Montreal,10000,2500,12500.0,45500.0,58000.0,0.811188811189,True
+70000,First of month (no vacation for prospect),Division R,Paris,3500,5000,11350.0,50000.0,61350.0,0.858041958042,True
+89500,First of month (no vacation for prospect),Division R,Shanghai,8750,30000,-27875.0,102250.0,74375.0,1.04020979021,False
+80000,First of month (no vacation for prospect),Division R,Shanghai,10000,5000,5500.0,64000.0,69500.0,0.972027972028,True

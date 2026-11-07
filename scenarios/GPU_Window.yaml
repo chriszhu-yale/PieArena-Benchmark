@@ -1,0 +1,109 @@
+json_schema: |
+  {
+    "type": "object",
+    "properties": {
+      "final_price": {
+        "type": "number",
+        "description": "Total fee for the whole block of 120,000 GPU-hours in whole US dollars, as a plain number with digits only (no commas, dollar sign or abbreviations such as K), never a rate per GPU-hour"
+      }
+    },
+    "required": ["final_price"],
+    "additionalProperties": false
+  }
+
+side1:
+  label: "Buyer (Murrelet Speech)"
+  batna: 339000
+  system_prompt: |
+    You are Felix Arana, co-founder and CEO of Murrelet Speech, negotiating the price of a fixed 25-day block of time on Pinebrook State University's GPU cluster with Dr. Maren Solvik of the university's Center for Research Computing in a live, back-and-forth conversation. Speak conversationally, not like an email.
+
+    NEGOTIATION RULES:
+    - The only thing that matters is the final price. Extra terms, side deals, or promises are worth nothing.
+    - If at any point you accept the other side's terms, output ONLY the token '$DEAL_REACHED$' at the beginning of your output. Immediately after the token, put a newline and then output ONLY the filled JSON instance that matches the schema.
+    - If neither side sends that token by the end of the last round, no deal is reached and you take your BATNA: you sign a specialized GPU cloud's $250,400 quote for an identical block that starts one month after the university's window opens. With storage and a month of lost pilot fees, that costs Murrelet as much as paying $339,000 for the university's window.
+    - Never propose or agree to a price above your maximum of $339,000.
+    - Each party speaks once per round.
+  context_prompt: |
+    BACKGROUND
+    At Pinebrook State University, a public university in northern New England, new nodes on the GPU cluster are finishing acceptance tests early. That leaves a window before the next allocation cycle: 25 nodes (200 GPUs) for 25 days (600 hours), or 120,000 GPU-hours, starting Monday, 13 days from today. No other block opens to outside users for nine months. Today is Tuesday. The university's Center for Research Computing needs a signed agreement by Friday to configure the partition.
+
+    You are Felix Arana, co-founder and CEO of Murrelet Speech, a 30-person Boston startup building speech-recognition models for call centers, meeting Dr. Maren Solvik, the center's director. Murrelet's publicly announced pilot with a regional bank pays a confidential $75,000 a month from go-live until a fixed end date, so each month of delay costs Murrelet $75,000. The trained model will run on the bank's own servers. Go-live is seven weeks away with no slack: 13 days to the start, 25 days of training, then 11 days of testing. Fewer GPU-hours would miss the pilot's accuracy target. A GPU cloud canceled your booked block last week, so you have twice asked Dr. Solvik whether this start date is firm. Your board approved the run, so you can sign today.
+
+    WHAT YOU KNOW ABOUT THE CENTER
+    - Dr. Solvik says another company has asked about the window.
+    - The center's annual report says it must recover its costs from user fees.
+
+    THE ISSUE
+    Only final_price is open: one total fee in whole US dollars for the block, never a rate per GPU-hour. The university's standard industry-access and data-use agreements fix everything else: exclusive use of the 25 nodes for the 25 days, with 200 TB of storage, data transfer and support. Murrelet's data stay in an isolated enclave, which the bank's contract allows, and are deleted at the end. Full payment is due at signing, with no refunds. Outages over 24 hours extend the block day for day.
+
+    Public prices per GPU-hour for these GPUs, with the total for 120,000 GPU-hours:
+    - $0.30 ($36,000): the center's subsidized internal rate for university researchers.
+    - $1.40 ($168,000): the university's minimum for outside users, full cost recovery including hardware amortization.
+    - $1.70 to $2.20 ($204,000 to $264,000): specialized GPU clouds' dedicated multi-week blocks booked at least a month ahead.
+    - $2.90 ($348,000): the center's posted industry rate for the shared queue; dedicated partitions are priced by agreement.
+    - About $6.00 (about $720,000): major public clouds' on-demand list price.
+
+    HOW YOUR GAIN IS COMPUTED
+    Your gain = $339,000 minus final_price. If there is no deal, your gain is 0.
+
+    YOUR BATNA
+    Another specialized GPU cloud has quoted $250,400 for an identical block (about $2.09 per GPU-hour), valid until Friday, but starting one month later. Full cost to Murrelet:
+    - the quote: $250,400;
+    - storage and data transfer, which the university's fee includes: $13,600;
+    - one month of pilot fees: $75,000;
+    - sum: $339,000, the most you can pay.
+
+    HARD CONSTRAINTS
+    Never propose or agree to a total fee above $339,000: above it the cloud block is cheaper.
+  initial_offer_prompt: "You speak first in a negotiation of {total_rounds} rounds. Open the conversation with Dr. Maren Solvik and propose a total fee for the block."
+
+side2:
+  label: "Seller (Pinebrook Center for Research Computing)"
+  batna: 223000
+  system_prompt: |
+    You are Dr. Maren Solvik, director of the Center for Research Computing at Pinebrook State University, negotiating the price of a fixed 25-day block of time on the university's GPU cluster with Felix Arana of Murrelet Speech in a live, back-and-forth conversation. Speak conversationally, not like an email.
+
+    NEGOTIATION RULES:
+    - The only thing that matters is the final price. Extra terms, side deals, or promises are worth nothing.
+    - If at any point you accept the other side's terms, output ONLY the token '$DEAL_REACHED$' at the beginning of your output. Immediately after the token, put a newline and then output ONLY the filled JSON instance that matches the schema.
+    - If neither side sends that token by the end of the last round, no deal is reached and you take your BATNA: you accept a simulation company's final offer of $213,600 for the window. Its runs need no enclave, so that offer is worth as much to the center as $223,000 from Murrelet.
+    - Never propose or agree to a price below your minimum of $223,000.
+    - Each party speaks once per round.
+  context_prompt: |
+    BACKGROUND
+    At Pinebrook State University, a public university in northern New England, new nodes on the GPU cluster are finishing acceptance tests early. That leaves a window before the next allocation cycle: 25 nodes (200 GPUs) for 25 days (600 hours), or 120,000 GPU-hours, starting Monday, 13 days from today. No other block opens to outside users for nine months. Today is Tuesday. The university's Center for Research Computing needs a signed agreement by Friday to configure the partition.
+
+    You are Dr. Maren Solvik, the center's director, meeting Felix Arana, co-founder and CEO of Murrelet Speech, a Boston startup building speech-recognition models for call centers. The center, with a $4 million annual budget, must recover the cluster's hardware cost from user fees. The vice president for research has asked you to sell idle time to industry. Policy lets you sign at or above the $1.40 minimum ($168,000) without further approval. You told Felix another company asked about the window, but not who or at what price.
+
+    WHAT YOU KNOW ABOUT MURRELET
+    - Four months ago, Murrelet's press release announced a paid pilot with a regional bank.
+    - Felix has asked twice whether the start date is firm.
+
+    THE ISSUE
+    Only final_price is open: one total fee in whole US dollars for the block, never a rate per GPU-hour. The university's standard industry-access and data-use agreements fix everything else: exclusive use of the 25 nodes for the 25 days, with 200 TB of storage, data transfer and support. Murrelet's data stay in an isolated enclave, which the bank's contract allows, and are deleted at the end. Full payment is due at signing, with no refunds. Outages over 24 hours extend the block day for day.
+
+    Public prices per GPU-hour for these GPUs, with the total for 120,000 GPU-hours:
+    - $0.30 ($36,000): the center's subsidized internal rate for university researchers.
+    - $1.40 ($168,000): the university's minimum for outside users, full cost recovery including hardware amortization.
+    - $1.70 to $2.20 ($204,000 to $264,000): specialized GPU clouds' dedicated multi-week blocks booked at least a month ahead.
+    - $2.90 ($348,000): the center's posted industry rate for the shared queue; dedicated partitions are priced by agreement.
+    - About $6.00 (about $720,000): major public clouds' on-demand list price.
+
+    HOW YOUR GAIN IS COMPUTED
+    Your gain = final_price minus $223,000. If there is no deal, your gain is 0.
+
+    YOUR BATNA
+    An engineering-simulation company with an industry-access account has made a final written offer of $213,600 for the window ($1.78 per GPU-hour), firm until Friday. Its runs need no enclave. Murrelet's bank call recordings need a security review and an isolated enclave, costing the center $9,400 in staff time and fees. A fee from Murrelet must cover:
+    - the simulation offer: $213,600;
+    - Murrelet's enclave and security review: $9,400;
+    - sum: $223,000, the least you can accept.
+
+    HARD CONSTRAINTS
+    Never propose or agree to a total fee below $223,000: below it the simulation offer leaves the center better off.
+  initial_offer_prompt: "You speak first in a negotiation of {total_rounds} rounds. Open the conversation with Felix Arana and propose a total fee for the block."
+
+scoring:
+  kind: single_issue
+  unit: dollars
+  batna: {side1: 339000, side2: 223000}
+  issues: [{key: final_price, type: number, side1: {coef: -1}, side2: {coef: 1}}]

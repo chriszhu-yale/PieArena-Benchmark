@@ -1,0 +1,2824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Negotiation Practice - AI Training System</title>
+    <style>
+        /* ===================================================================
+           CSS Variables - Color Scheme & Spacing
+           =================================================================== */
+        :root {
+            --primary-blue: #2563eb;
+            --primary-blue-dark: #1e40af;
+            --success-green: #10b981;
+            --warning-yellow: #f59e0b;
+            --error-red: #ef4444;
+            
+            --student-bg: #dbeafe;
+            --ai-bg: #d1fae5;
+            --system-bg: #fef3c7;
+            --deal-bg: #dcfce7;
+            
+            --border-color: #e5e7eb;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-white: #ffffff;
+            --bg-gray: #f9fafb;
+            
+            --radius: 12px;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ===================================================================
+           Base Styles
+           =================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-gray);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        button {
+            cursor: pointer;
+            font-family: inherit;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-blue-dark);
+        }
+
+        .btn-secondary {
+            background: var(--bg-white);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-danger {
+            background: var(--error-red);
+            color: white;
+        }
+
+        input, select, textarea {
+            font-family: inherit;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ===================================================================
+           App Container
+           =================================================================== */
+        .app-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .app-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .app-header h1 {
+            font-size: 32px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .app-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .help-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: white;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 8px;
+        }
+
+        .help-button:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .help-button span {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* ===================================================================
+           Scenario Selection Screen
+           =================================================================== */
+        #scenarioScreen {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 32px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-section {
+            margin-bottom: 24px;
+        }
+
+        .form-section h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .scenario-description {
+            background: var(--bg-gray);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            border-left: 3px solid var(--primary-blue);
+        }
+
+        .role-info {
+            background: var(--system-bg);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 14px;
+            border-left: 3px solid var(--warning-yellow);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: normal;
+        }
+
+        #startBtn {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            margin-top: 24px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+        }
+
+        .error-message {
+            background: #fee;
+            color: var(--error-red);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #fcc;
+            margin-top: 12px;
+        }
+
+        /* ===================================================================
+           Chat Screen - Two Column Layout
+           =================================================================== */
+        #chatScreen {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 20px;
+            height: calc(100vh - 100px);
+        }
+
+        /* ===================================================================
+           Left Column - Chat Interface
+           =================================================================== */
+        .chat-main {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Chat Header with Session Info */
+        .chat-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h2 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .chat-info {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+
+        .chat-info-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .chat-info-item code {
+            background: var(--bg-gray);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-badge.active {
+            background: var(--deal-bg);
+            color: var(--success-green);
+        }
+
+        .status-badge.completed {
+            background: var(--student-bg);
+            color: var(--primary-blue);
+        }
+
+        .header-right button {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* ===================================================================
+           Messages Area
+           =================================================================== */
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: var(--bg-gray);
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            background: var(--bg-white);
+            border: 2px solid var(--border-color);
+        }
+
+        .message-content {
+            flex: 1;
+            background: var(--bg-white);
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-text {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .message.student .message-content {
+            background: var(--student-bg);
+            border-left: 3px solid var(--primary-blue);
+        }
+
+        .message.ai .message-content {
+            background: var(--ai-bg);
+            border-left: 3px solid var(--success-green);
+        }
+
+        .message.system .message-content {
+            background: var(--system-bg);
+            border-left: 3px solid var(--warning-yellow);
+        }
+
+        .message.deal .message-content {
+            background: var(--deal-bg);
+            border-left: 3px solid var(--success-green);
+        }
+
+        .message pre {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        /* Thinking animation */
+        .message.thinking .message-avatar {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .thinking-dots::after {
+            content: '...';
+            animation: blink 1.4s infinite;
+        }
+
+        @keyframes blink {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* ===================================================================
+           Input Area
+           =================================================================== */
+        .input-area {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-white);
+        }
+
+        .input-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .input-controls textarea {
+            flex: 1;
+            min-height: 180px;
+            max-height: 500px;
+            resize: vertical;
+        }
+
+        .input-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-buttons button {
+            white-space: nowrap;
+            padding: 8px 16px;
+        }
+
+        .input-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* ===================================================================
+           Right Panel - Two Section Layout
+           =================================================================== */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Section 1: Your Role (Scrollable, takes most space) */
+        .sidebar-section.role-info {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        /* Section 2: How to Accept (Fixed at bottom, collapsible) */
+        .sidebar-section.accept-deal {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            box-shadow: var(--shadow);
+            flex-shrink: 0;
+        }
+
+        .sidebar-section h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-section h4 {
+            font-size: 14px;
+            margin-top: 16px;
+            margin-bottom: 8px;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .sidebar-section p, .sidebar-section ul, .sidebar-section ol {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-section ul, .sidebar-section ol {
+            padding-left: 20px;
+        }
+
+        .sidebar-section li {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-section code {
+            background: var(--bg-gray);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .sidebar-section .example-box {
+            background: var(--bg-gray);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 13px;
+            border-left: 3px solid var(--primary-blue);
+        }
+
+        /* Role Info specific styles */
+        .batna-badge {
+            display: inline-block;
+            background: var(--warning-yellow);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .role-content {
+            background: var(--bg-gray);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-y: auto;
+        }
+        
+        /* Set height ratio for the two sections (4:6) */
+        #systemPromptContent {
+            max-height: 200px;  /* Rules & Objectives - shorter */
+        }
+        
+        #contextPromptContent {
+            max-height: 400px;  /* Background & Priorities - taller */
+        }
+
+        /* Collapsible section for "How to Accept" */
+        .accept-deal details {
+            cursor: pointer;
+        }
+
+        .accept-deal summary {
+            cursor: pointer;
+            font-weight: 600;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+            font-size: 15px;
+        }
+
+        .accept-deal summary::before {
+            content: '▶';
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+
+        .accept-deal details[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        .accept-deal-content {
+            padding-top: 12px;
+        }
+
+        .success-text {
+            color: var(--success-green);
+        }
+
+        .warning-text {
+            color: var(--warning-yellow);
+        }
+
+        /* ===================================================================
+           Responsive Design
+           =================================================================== */
+        @media (max-width: 1200px) {
+            #chatScreen {
+                grid-template-columns: 1fr 320px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            #chatScreen {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+
+            .sidebar {
+                order: -1;
+                margin-bottom: 20px;
+            }
+
+            .chat-main {
+                height: 600px;
+            }
+        }
+
+        /* ===================================================================
+           Scrollbar Styling
+           =================================================================== */
+        .messages-container::-webkit-scrollbar,
+        .role-content::-webkit-scrollbar,
+        .sidebar-section.role-info::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .messages-container::-webkit-scrollbar-track,
+        .role-content::-webkit-scrollbar-track,
+        .sidebar-section.role-info::-webkit-scrollbar-track {
+            background: var(--bg-gray);
+            border-radius: 4px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb,
+        .role-content::-webkit-scrollbar-thumb,
+        .sidebar-section.role-info::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb:hover,
+        .role-content::-webkit-scrollbar-thumb:hover,
+        .sidebar-section.role-info::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* ===================================================================
+           Instructions Modal Styles
+           =================================================================== */
+        .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); animation: fadeIn 0.3s; }
+        .modal.show { display: flex !important; justify-content: center; align-items: center; }
+        .modal-content { background: white; border-radius: 16px; width: 90%; max-width: 700px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); animation: slideUp 0.3s; }
+        .modal-header { padding: 24px 32px; border-bottom: 2px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h2 { margin: 0; font-size: 24px; color: var(--text-primary); }
+        .modal-close { background: none; border: none; font-size: 32px; color: var(--text-secondary); cursor: pointer; padding: 0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: all 0.2s; }
+        .modal-close:hover { background: var(--bg-gray); color: var(--text-primary); transform: none; }
+        .modal-body { padding: 24px 32px; overflow-y: auto; flex: 1; }
+        .modal-footer { padding: 20px 32px; border-top: 2px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .instruction-section { margin-bottom: 32px; }
+        .instruction-section:last-child { margin-bottom: 0; }
+        .instruction-section h3 { font-size: 18px; margin-bottom: 16px; color: var(--primary-blue); border-left: 4px solid var(--primary-blue); padding-left: 12px; }
+        .instruction-item { margin-bottom: 16px; padding: 16px; background: var(--bg-gray); border-radius: 8px; border-left: 3px solid var(--border-color); }
+        .instruction-item:last-child { margin-bottom: 0; }
+        .instruction-item.warning { background: #fff3cd; border-left-color: var(--warning-yellow); }
+        .instruction-item.important { background: #d1ecf1; border-left-color: var(--primary-blue); }
+        .instruction-item strong { display: block; margin-bottom: 8px; font-size: 15px; color: var(--text-primary); }
+        .instruction-item p { margin: 0; line-height: 1.6; color: var(--text-secondary); font-size: 14px; }
+        .instruction-item p + p { margin-top: 8px; }
+        .instruction-item ul { margin: 8px 0 0 0; padding-left: 20px; }
+        .instruction-item li { margin-bottom: 6px; color: var(--text-secondary); line-height: 1.6; font-size: 14px; }
+        .instruction-item li:last-child { margin-bottom: 0; }
+        .instruction-item code { background: rgba(0, 0, 0, 0.08); padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 13px; color: #c7254e; }
+        .checkbox-container { display: flex; align-items: center; gap: 8px; }
+        .checkbox-container input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; margin: 0; }
+        .checkbox-container label { margin: 0; cursor: pointer; user-select: none; font-size: 14px; }
+        
+        /* Radio button selection hover and checked states */
+        input[type="radio"]:checked + div {
+            font-weight: 600;
+        }
+
+        label:has(input[type="radio"]:checked) {
+            border-color: var(--primary-blue) !important;
+            background-color: #eff6ff;
+        }
+
+        label:has(input[type="radio"]):hover {
+            border-color: var(--primary-blue);
+            background-color: #f9fafb;
+        }
+
+        /* Consent option hover and selected states */
+        .consent-option:hover {
+            border-color: var(--primary-blue) !important;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+        }
+
+        .consent-option:has(input:checked) {
+            border-color: var(--primary-blue) !important;
+            background: #eff6ff !important;
+            box-shadow: 0 2px 12px rgba(37, 99, 235, 0.2);
+        }
+        
+        /* Timer display */
+        .modal-timer {
+            background: var(--warning-yellow);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) {
+            .modal-content { width: 95%; max-height: 90vh; }
+            .modal-header, .modal-body, .modal-footer { padding: 16px 20px; }
+            .help-button { position: static; margin: 12px auto 0; }
+            .app-header { margin-bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- App Header -->
+        <div class="app-header">
+            <h1>🤝 Negotiation Practice System</h1>
+            <p>Develop your negotiation skills with AI-powered training scenarios</p>
+            <button class="help-button" onclick="openHelpModal()">
+                <span>?</span> Help
+            </button>
+        </div>
+
+        <!-- ===================================================================
+             Scenario Selection Screen
+             =================================================================== -->
+        <div id="scenarioScreen">
+            <!-- ==================== DEMOGRAPHIC INFORMATION (OPTIONAL) ==================== -->
+            <div class="form-section">
+                <h3>📋 Demographic Information</h3>
+
+                <!-- 1. Major -->
+                <div class="form-group">
+                    <label>Major</label>
+                    <input type="text" id="major">
+                </div>
+
+                <!-- 2. Gender -->
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select id="gender">
+                        <option value="">Prefer not to say</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Non-binary">Non-binary</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input type="text" id="genderOther" class="hidden" 
+                           style="margin-top: 8px;" 
+                           placeholder="Please specify">
+                </div>
+
+                <!-- 3. Real-world Negotiation Experience -->
+                <div class="form-group">
+                    <label>Real-world Negotiation Experience</label>
+                    <small style="color: #666; display: block; margin-bottom: 8px;">
+                        How much real-world negotiation experience do you have?
+                    </small>
+                    <select id="negotiationExperience">
+                        <option value="">Prefer not to disclose</option>
+                        <option value="None">None (almost no negotiation experience)</option>
+                        <option value="A few instances">A few instances (e.g., housing, salary, small purchases, etc., fewer than 5 times)</option>
+                        <option value="Occasional">Occasional negotiation experience (e.g., occasional negotiations in internships/part-time jobs, approximately 5-20 times)</option>
+                        <option value="Frequent">Frequent negotiation experience (e.g., regular negotiations in work such as project scope, pricing, contracts, more than 20 times)</option>
+                        <option value="Professional">Specialized or professional negotiation experience (e.g., negotiation is a core competency in sales/BD, consulting, law, procurement, etc.)</option>
+                    </select>
+                </div>
+            </div>
+            <!-- ==================== END DEMOGRAPHIC INFORMATION ==================== -->
+
+            <div class="form-section">
+                <h3>🎯 Negotiation Scenario</h3>
+                
+                <div class="form-group">
+                    <label for="scenarioSelect">Select Scenario</label>
+                    <select id="scenarioSelect" required>
+                        <option value="">-- Choose a scenario --</option>
+                    </select>
+                    <div class="scenario-description" id="scenarioDescription" style="display: none;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="roleSelect">Your Role</label>
+                    <select id="roleSelect" required disabled>
+                        <option value="">-- Select scenario first --</option>
+                    </select>
+                    <div class="role-info" id="roleInfo" style="display: none;"></div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>🤖 AI Configuration</h3>
+                
+                <div class="form-group">
+                    <label for="modelSelect">AI Model</label>
+                    <select id="modelSelect">
+                        <option value="openai/gpt-5" selected>GPT-5</option>
+                    </select>
+                    <div class="form-hint">Choose the AI model for negotiation</div>
+                </div>
+
+                <!-- Who Goes First Selection -->
+                <div class="form-group">
+                    <label>Who Goes First?</label>
+                    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; transition: all 0.2s;">
+                            <input type="radio" name="whoGoesFirst" value="student" checked style="width: auto;">
+                            <div>
+                                <div style="font-weight: 500;">Student goes first</div>
+                                <div style="font-size: 13px; color: #6b7280;">You will send the first message</div>
+                            </div>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; transition: all 0.2s;">
+                            <input type="radio" name="whoGoesFirst" value="ai" style="width: auto;">
+                            <div>
+                                <div style="font-weight: 500;">AI goes first</div>
+                                <div style="font-size: 13px; color: #6b7280;">AI will send the first message</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="useMemory" checked>
+                    <label for="useMemory">Enable AI Memory (tracks negotiation state)</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="usePlan" checked>
+                    <label for="usePlan">Enable AI Strategic Planning</label>
+                </div>
+
+                <div class="form-group" style="margin-top: 16px;">
+                    <label for="totalRoundsInput">Number of Rounds</label>
+                    <input type="number" id="totalRoundsInput" min="1" max="20" value="6" required>
+                    <div class="form-hint">Maximum number of negotiation rounds (default: 6)</div>
+                </div>
+            </div>
+
+            <button id="startBtn" class="btn-primary">Start Negotiation</button>
+            
+            <div id="loadingMessage" class="loading hidden">
+                <span class="loading-dots">Starting negotiation</span>
+            </div>
+            
+            <div id="errorMessage" class="error-message hidden"></div>
+        </div>
+
+        <!-- ===================================================================
+             Chat Screen (Two-Column Layout)
+             =================================================================== -->
+        <div id="chatScreen" class="hidden">
+            <!-- Left Column: Chat Interface -->
+            <div class="chat-main">
+                <!-- Chat Header with Session Info -->
+                <div class="chat-header">
+                    <div class="header-left">
+                        <h2>💬 Negotiation Session</h2>
+                        <div class="chat-info">
+                            <div class="chat-info-item">
+                                <span>Session:</span>
+                                <code id="sessionIdDisplay">-</code>
+                            </div>
+                            <div class="chat-info-item">
+                                <span>Scenario:</span>
+                                <strong id="headerScenario">-</strong>
+                            </div>
+                            <div class="chat-info-item">
+                                <span>Role:</span>
+                                <strong id="headerRole">-</strong>
+                            </div>
+                            <div class="chat-info-item">
+                                <span>Round:</span>
+                                <strong id="roundDisplay">1/10</strong>
+                            </div>
+                            <div class="chat-info-item">
+                                <span id="statusDisplay" class="status-badge active">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        <button id="newSessionBtn" class="btn-secondary">New Session</button>
+                    </div>
+                </div>
+
+                <!-- Messages Container -->
+                <div class="messages-container" id="messagesContainer">
+                    <!-- Messages will be added here dynamically -->
+                </div>
+
+                <!-- Input Area -->
+                <div class="input-area">
+                    <div class="input-controls">
+                        <textarea 
+                            id="messageInput" 
+                            placeholder="Type your negotiation message here..."
+                            rows="3"
+                        ></textarea>
+                        <div class="input-buttons">
+                            <button id="sendBtn" class="btn-primary">Send</button>
+                            <button id="endBtn" class="btn-danger">End</button>
+                        </div>
+                    </div>
+                    <div class="input-hint">
+                        Press <strong>Ctrl/Cmd + Enter</strong> to send quickly
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Two Section Layout -->
+            <div class="sidebar">
+                <!-- Section 1: Your Role (Scrollable) -->
+                <div class="sidebar-section role-info">
+                    <h3>🎭 Your Role <span id="roleLabel" class="batna-badge">Loading...</span></h3>
+                    
+                    <h4>💰 Your BATNA</h4>
+                    <p id="batnaValue">Loading...</p>
+                    
+                    <h4>📋 Rules & Objectives</h4>
+                    <div class="role-content" id="systemPromptContent">Loading...</div>
+                    
+                    <h4>📖 Background & Priorities</h4>
+                    <div class="role-content" id="contextPromptContent">Loading...</div>
+                </div>
+
+                <!-- Section 2: How to Accept (Fixed, Collapsible) -->
+                <div class="sidebar-section accept-deal">
+                    <details>
+                        <summary>🤝 How to Accept a Deal</summary>
+                        <div class="accept-deal-content">
+                            <p><strong>To accept the AI's most recent offer:</strong></p>
+                            
+                            <h4 style="margin-top: 12px;">Example (copy this format):</h4>
+                            <div class="example-box" style="background: #f0f9ff; border-left: 3px solid #2563eb;">
+                                <pre id="jsonCleanExample" style="margin: 0; font-size: 12px; line-height: 1.5;">Loading...</pre>
+                            </div>
+                            <p style="margin: 4px 0 0 0; font-size: 11px; color: #6b7280;">💡 <strong>Important:</strong> No blank lines between fields, no comments - just the clean format as shown above</p>
+                            
+                            <h4 style="margin-top: 16px;">Field Details (what to fill in):</h4>
+                            <div class="example-box">
+                                <pre id="jsonExampleContent" style="margin: 0; padding: 8px; background: rgba(0,0,0,0.05); border-radius: 4px; font-size: 11px; max-height: 200px; overflow-y: auto; line-height: 1.5;">Loading...</pre>
+                            </div>
+                            
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===================================================================
+        // Global State
+        // ===================================================================
+        // Backend URL: ?api=<url> (remembered in localStorage), else http://localhost:8000
+        const API_BASE = (() => {
+            const fromQuery = new URLSearchParams(window.location.search).get('api');
+            let base = fromQuery || 'http://localhost:8000';
+            try {
+                if (fromQuery) localStorage.setItem('negotiation_api_base', fromQuery);
+                else base = localStorage.getItem('negotiation_api_base') || base;
+            } catch (e) { /* storage unavailable: use the query or the default */ }
+            return base.replace(/\/+$/, '');
+        })();
+
+        let scenarios = [];
+        let currentSessionId = null;
+        let currentScenarioName = null;
+        let currentStudentRole = null;
+        let isNegotiationActive = false;
+        let aiJustProposedDeal = false; // Track if AI just proposed deal
+
+        // ===================================================================
+        // DOM Elements Cache
+        // ===================================================================
+        const elements = {
+            // Scenario Screen
+            scenarioScreen: document.getElementById('scenarioScreen'),
+            studentId: document.getElementById('studentId'),
+            studentName: document.getElementById('studentName'),
+            scenarioSelect: document.getElementById('scenarioSelect'),
+            scenarioDescription: document.getElementById('scenarioDescription'),
+            roleSelect: document.getElementById('roleSelect'),
+            roleInfo: document.getElementById('roleInfo'),
+            modelSelect: document.getElementById('modelSelect'),
+            randomFirstTurn: document.getElementById('randomFirstTurn'),
+            useMemory: document.getElementById('useMemory'),
+            usePlan: document.getElementById('usePlan'),
+            totalRoundsInput: document.getElementById('totalRoundsInput'),  // 
+            startBtn: document.getElementById('startBtn'),
+            loadingMessage: document.getElementById('loadingMessage'),
+            errorMessage: document.getElementById('errorMessage'),
+            
+            // Chat Screen
+            chatScreen: document.getElementById('chatScreen'),
+            messagesContainer: document.getElementById('messagesContainer'),
+            messageInput: document.getElementById('messageInput'),
+            sendBtn: document.getElementById('sendBtn'),
+            endBtn: document.getElementById('endBtn'),
+            roundDisplay: document.getElementById('roundDisplay'),
+            statusDisplay: document.getElementById('statusDisplay'),
+            newSessionBtn: document.getElementById('newSessionBtn'),
+            
+            // Header info
+            sessionIdDisplay: document.getElementById('sessionIdDisplay'),
+            headerScenario: document.getElementById('headerScenario'),
+            headerRole: document.getElementById('headerRole'),
+            
+            // Role Info Elements
+            roleLabel: document.getElementById('roleLabel'),
+            batnaValue: document.getElementById('batnaValue'),
+            systemPromptContent: document.getElementById('systemPromptContent'),
+            contextPromptContent: document.getElementById('contextPromptContent'),
+            jsonExampleContent: document.getElementById('jsonExampleContent'),
+            jsonCleanExample: document.getElementById('jsonCleanExample')
+        };
+   
+
+        // ===================================================================
+        // Initialization
+        // ===================================================================
+        async function init() {
+            // Check for locked mode FIRST
+            const urlParams = new URLSearchParams(window.location.search);
+            const locked = urlParams.get('lock') === 'true';
+            const presetScenario = urlParams.get('scenario');
+            const presetRole = urlParams.get('role');
+            const presetMode = urlParams.get('mode');
+            const presetFirst = urlParams.get('first');
+            const presetRounds = urlParams.get('rounds');
+            
+            // Load scenarios first
+            await loadScenarios();
+            attachEventListeners();
+            
+            // Apply locked mode after scenarios are loaded
+            if (locked && presetScenario && presetRole) {
+                applyLockedMode(presetScenario, presetRole, presetMode, presetFirst, presetRounds);
+            }
+        }
+
+        // ===================================================================
+        // Apply Locked Mode (FINAL FIX - Case Insensitive + Mode + First + Rounds)
+        // ===================================================================
+        function applyLockedMode(scenarioId, roleId, mode, first, rounds) {
+            // First delay: ensure DOM is fully ready
+            setTimeout(() => {
+                // Find the correct scenario value (case-insensitive match)
+                const scenarioOptions = Array.from(elements.scenarioSelect.options);
+                const matchedOption = scenarioOptions.find(opt => 
+                    opt.value.toLowerCase() === scenarioId.toLowerCase()
+                );
+                
+                if (!matchedOption) {
+                    console.error('Scenario not found:', scenarioId);
+                    console.log('Available scenarios:', scenarioOptions.map(o => o.value));
+                    return;
+                }
+                
+                const correctScenarioValue = matchedOption.value;
+                console.log('Matched scenario:', scenarioId, '→', correctScenarioValue);
+                
+                // Auto-select scenario with correct value
+                elements.scenarioSelect.value = correctScenarioValue;
+                elements.scenarioSelect.dispatchEvent(new Event('change'));
+                
+                // Second delay: wait for role options to be populated after scenario change
+                setTimeout(() => {
+                    // Auto-select role
+                    elements.roleSelect.value = roleId;
+                    elements.roleSelect.dispatchEvent(new Event('change'));
+                    
+                    // Lock mode (use_memory + use_plan)
+                    if (mode) {
+                        if (mode === 'base') {
+                            elements.useMemory.checked = false;
+                            elements.usePlan.checked = false;
+                        } else if (mode === 'm') {
+                            elements.useMemory.checked = true;
+                            elements.usePlan.checked = false;
+                        } else if (mode === 'mp') {
+                            elements.useMemory.checked = true;
+                            elements.usePlan.checked = true;
+                        }
+                        elements.useMemory.disabled = true;
+                        elements.usePlan.disabled = true;
+                    }
+                    
+                    // Lock who goes first
+                    if (first) {
+                        const radioButtons = document.querySelectorAll('input[name="whoGoesFirst"]');
+                        radioButtons.forEach(radio => {
+                            if (radio.value === first) {
+                                radio.checked = true;
+                            }
+                            radio.disabled = true;
+                        });
+                    }
+                    
+                    // Lock total rounds
+                    if (rounds) {
+                        const roundsValue = parseInt(rounds);
+                        if (roundsValue >= 1 && roundsValue <= 20) {
+                            elements.totalRoundsInput.value = roundsValue;
+                            elements.totalRoundsInput.disabled = true;
+                            elements.totalRoundsInput.style.opacity = '0.6';
+                            elements.totalRoundsInput.style.cursor = 'not-allowed';
+                        }
+                    }
+                    
+                    // Third delay: ensure DOM updates are complete before reading values
+                    setTimeout(() => {
+                        // Get scenario name from the populated select dropdown
+                        const selectedScenario = elements.scenarioSelect.options[elements.scenarioSelect.selectedIndex];
+                        const scenarioName = selectedScenario ? selectedScenario.textContent : scenarioId;
+                        
+                        // Get role name from the populated select dropdown
+                        const selectedRole = elements.roleSelect.options[elements.roleSelect.selectedIndex];
+                        const roleName = selectedRole ? selectedRole.textContent : roleId;
+                        
+                        console.log('DEBUG - scenarioName:', scenarioName);
+                        console.log('DEBUG - roleName:', roleName);
+                        
+                        // Lock both dropdowns using pointer-events (keeps values accessible unlike disabled)
+                        elements.scenarioSelect.style.pointerEvents = 'none';
+                        elements.roleSelect.style.pointerEvents = 'none';
+                        elements.scenarioSelect.style.opacity = '0.6';
+                        elements.roleSelect.style.opacity = '0.6';
+                        elements.scenarioSelect.style.cursor = 'not-allowed';
+                        elements.roleSelect.style.cursor = 'not-allowed';
+                        
+                        // Add lock indicator with proper scenario and role names
+                        const lockDiv = document.createElement('div');
+                        lockDiv.style.cssText = 'background: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px; margin-top: 16px; border-radius: 8px;';
+                        lockDiv.innerHTML = `
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                                <span style="font-size: 20px;">🔒</span>
+                                <strong style="color: #92400e;">Locked Mode</strong>
+                            </div>
+                            <div style="color: #78350f; font-size: 14px; line-height: 1.6;">
+                                <div style="margin-bottom: 6px;">
+                                    <strong>Scenario:</strong> ${scenarioName}
+                                </div>
+                                <div>
+                                    <strong>Your Role:</strong> ${roleName}
+                                </div>
+                            </div>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #fde68a; color: #666; font-size: 13px;">
+                                Your scenario and role have been pre-assigned for this session.
+                            </div>
+                        `;
+                        elements.roleSelect.parentNode.appendChild(lockDiv);
+                    }, 100);  // Third delay: ensure values can be read correctly
+                }, 300);  // Second delay: ensure role dropdown is fully populated
+            }, 300);  // First delay: ensure scenario dropdown is fully populated
+        }
+
+        // ===================================================================
+        // Load Available Scenarios
+        // ===================================================================
+        async function loadScenarios() {
+            try {
+                const response = await fetch(`${API_BASE}/scenarios`);
+                const data = await response.json();
+                scenarios = data.scenarios;
+                
+                populateScenarioSelect();
+            } catch (error) {
+                console.error('Failed to load scenarios:', error);
+                showError('errorMessage', 'Failed to load scenarios. Please refresh the page.');
+            }
+        }
+
+        // ===================================================================
+        // Populate Scenario Dropdown
+        // ===================================================================
+        function populateScenarioSelect() {
+            elements.scenarioSelect.innerHTML = '<option value="">-- Choose a scenario --</option>';
+            
+            scenarios.forEach(scenario => {
+                const option = document.createElement('option');
+                option.value = scenario.id;
+                option.textContent = scenario.name;
+                option.dataset.side1 = scenario.side1_label;
+                option.dataset.side2 = scenario.side2_label;
+                elements.scenarioSelect.appendChild(option);
+            });
+        }
+
+        // ===================================================================
+        // Event Listeners
+        // ===================================================================
+        function attachEventListeners() {
+            // Scenario selection
+            elements.scenarioSelect.addEventListener('change', onScenarioChange);
+            elements.roleSelect.addEventListener('change', onRoleChange);
+            
+            // Start negotiation
+            elements.startBtn.addEventListener('click', startNegotiation);
+            
+            // Chat actions
+            elements.sendBtn.addEventListener('click', sendMessage);
+            // Use onclick instead of addEventListener to avoid event stacking
+            elements.endBtn.onclick = endNegotiation;
+            elements.newSessionBtn.addEventListener('click', resetToScenarioScreen);
+            
+            // Keyboard shortcuts
+            elements.messageInput.addEventListener('keydown', handleKeyboardShortcut);
+        }
+
+        // ===================================================================
+        // Handle Scenario Selection Change
+        // ===================================================================
+        function onScenarioChange(e) {
+            const selectedOption = e.target.options[e.target.selectedIndex];
+            
+            if (!selectedOption.value) {
+                elements.scenarioDescription.style.display = 'none';
+                elements.roleSelect.disabled = true;
+                elements.roleSelect.innerHTML = '<option value="">-- Select scenario first --</option>';
+                elements.roleInfo.style.display = 'none';
+                return;
+            }
+            
+            // Show scenario description
+            elements.scenarioDescription.style.display = 'block';
+            elements.scenarioDescription.textContent = `Scenario: ${selectedOption.textContent}`;
+            
+            // Populate role dropdown
+            elements.roleSelect.disabled = false;
+            elements.roleSelect.innerHTML = `
+                <option value="">-- Choose your role --</option>
+                <option value="side1">${selectedOption.dataset.side1}</option>
+                <option value="side2">${selectedOption.dataset.side2}</option>
+            `;
+        }
+
+        // ===================================================================
+        // Handle Role Selection Change
+        // ===================================================================
+        function onRoleChange(e) {
+            const selectedOption = elements.scenarioSelect.options[elements.scenarioSelect.selectedIndex];
+            const role = e.target.value;
+            
+            if (!role) {
+                elements.roleInfo.style.display = 'none';
+                return;
+            }
+            
+            const roleLabel = role === 'side1' ? selectedOption.dataset.side1 : selectedOption.dataset.side2;
+            
+            elements.roleInfo.style.display = 'block';
+            elements.roleInfo.innerHTML = `You will play as: <strong>${roleLabel}</strong>`;
+        }
+
+        // ===================================================================
+        // Start Negotiation
+        // ===================================================================
+        async function startNegotiation() {
+            hideError('errorMessage');
+            
+            // Validate inputs (only scenario and role are required)
+            const scenarioName = elements.scenarioSelect.value;
+            const studentRole = elements.roleSelect.value;
+            
+            if (!scenarioName || !studentRole) {
+                showError('errorMessage', 'Please select scenario and role');
+                return;
+            }
+            
+            // Helper function to handle "Other" values
+            function getFieldValue(selectId, otherInputId) {
+                const selectValue = document.getElementById(selectId).value;
+                if (selectValue === 'Other') {
+                    const otherValue = document.getElementById(otherInputId).value.trim();
+                    return otherValue ? `Other: ${otherValue}` : 'Other';
+                }
+                return selectValue;
+            }
+            
+            // Get who goes first selection
+            const whoGoesFirst = document.querySelector('input[name="whoGoesFirst"]:checked').value;
+            const studentGoesFirst = (whoGoesFirst === 'student');
+            
+            // Show loading
+            elements.startBtn.disabled = true;
+            elements.loadingMessage.classList.remove('hidden');
+            
+            try {
+                const response = await fetch(`${API_BASE}/negotiation/start`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        major: document.getElementById('major').value.trim(),
+                        gender: getFieldValue('gender', 'genderOther'),
+                        negotiation_experience: document.getElementById('negotiationExperience').value,
+                        scenario_name: scenarioName,
+                        student_role: studentRole,
+                        ai_model: elements.modelSelect.value,
+                        student_goes_first: studentGoesFirst,
+                        use_memory: elements.useMemory.checked,
+                        use_plan: elements.usePlan.checked,
+                        total_rounds: parseInt(elements.totalRoundsInput.value)
+                    })
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Failed to start negotiation');
+                }
+                
+                const data = await response.json();
+                
+                // Save session info
+                currentSessionId = data.session_id;
+                currentScenarioName = scenarioName;
+                currentStudentRole = studentRole;
+                isNegotiationActive = true;
+                
+                // Update header info
+                const selectedScenario = scenarios.find(s => s.id === scenarioName);
+                const roleLabel = studentRole === 'side1' ? selectedScenario.side1_label : selectedScenario.side2_label;
+                
+                elements.sessionIdDisplay.textContent = data.session_id.substring(0, 8);
+                elements.headerScenario.textContent = selectedScenario.name;
+                elements.headerRole.textContent = roleLabel;
+                
+                // Load role information
+                await loadRoleInfo(currentSessionId);
+                
+                // Enter chat screen (which will show modals)
+                await enterChatScreen();
+                
+            } catch (error) {
+                console.error('Error starting negotiation:', error);
+                showError('errorMessage', error.message);
+                elements.startBtn.disabled = false;
+                elements.loadingMessage.classList.add('hidden');
+            }
+        }
+
+        // ===================================================================
+        // Load Role Information (with JSON example generation)
+        // ===================================================================
+        async function loadRoleInfo(sessionId) {
+            try {
+                const response = await fetch(`${API_BASE}/negotiation/${sessionId}/role_info`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load role information');
+                }
+                
+                const data = await response.json();
+                
+                // Update role label and BATNA
+                elements.roleLabel.textContent = data.role_label;
+                elements.batnaValue.textContent = `Your BATNA (Best Alternative): ${data.batna}`;
+                
+                // Update system prompt (rules & objectives)
+                elements.systemPromptContent.textContent = data.system_prompt;
+                
+                // Update context prompt (background & priorities)
+                elements.contextPromptContent.textContent = data.context_prompt;
+                
+                // Generate clean example (for copying)
+                const cleanExample = generateCleanJsonExample(data.json_schema);
+                elements.jsonCleanExample.textContent = cleanExample;
+                
+                // Generate detailed example with comments (for understanding)
+                const jsonExample = generateJsonExample(data.json_schema);
+                elements.jsonExampleContent.textContent = jsonExample;
+                
+            } catch (error) {
+                console.error('Error loading role info:', error);
+                elements.roleLabel.textContent = 'Error';
+                elements.batnaValue.textContent = 'Failed to load role information';
+                elements.systemPromptContent.textContent = 'Please refresh the page';
+                elements.contextPromptContent.textContent = 'Please refresh the page';
+                elements.jsonExampleContent.textContent = '{}';
+            }
+        }
+
+        // ===================================================================
+        // Generate JSON Example from Schema
+        // ===================================================================
+        function generateJsonExample(jsonSchemaString) {
+            try {
+                const schema = JSON.parse(jsonSchemaString);
+                const example = {};
+                const comments = {}; // Store comments for each field
+                
+                for (const [key, value] of Object.entries(schema.properties)) {
+                    // Skip value fields (student doesn't need to fill these)
+                    if (key.includes('value_of_deal') || key.includes('total_points') || key.includes('total_value')) {
+                        continue;
+                    }
+                    
+                    // Generate example value and comment based on type
+                    if (value.type === 'number') {
+                        example[key] = value.minimum || 0;
+                        
+                        // Add helpful comment for numbers
+                        if (value.minimum !== undefined && value.maximum !== undefined) {
+                            comments[key] = `Number - Range: ${value.minimum} to ${value.maximum}`;
+                        } else {
+                            comments[key] = 'Number - No $ or commas';
+                        }
+                    } else if (value.type === 'string' && value.enum) {
+                        example[key] = value.enum[0];
+                        
+                        // Add comment showing all options (keep it concise)
+                        const optionsList = value.enum.map(opt => `"${opt}"`).join(', ');
+                        comments[key] = `String - Options: ${optionsList}`;
+                    } else if (value.type === 'boolean') {
+                        example[key] = false;
+                        comments[key] = 'Boolean - true or false';
+                    } else if (value.type === 'string') {
+                        example[key] = "...";
+                        comments[key] = 'String';
+                    } else {
+                        example[key] = null;
+                        comments[key] = 'Value';
+                    }
+                }
+                
+                // Build JSON string with comments
+                let jsonLines = [];
+                jsonLines.push('{');
+                
+                const keys = Object.keys(example);
+                keys.forEach((key, index) => {
+                    const value = example[key];
+                    const comment = comments[key];
+                    const isLast = index === keys.length - 1;
+                    
+                    // Add comment line
+                    jsonLines.push(`  // ${comment}`);
+                    
+                    // Add key-value line
+                    const jsonValue = JSON.stringify(value);
+                    const comma = isLast ? '' : ',';
+                    jsonLines.push(`  "${key}": ${jsonValue}${comma}`);
+                    
+                    // Add blank line between fields (except last)
+                    if (!isLast) {
+                        jsonLines.push('');
+                    }
+                });
+                
+                jsonLines.push('}');
+                
+                return jsonLines.join('\n');
+            } catch (error) {
+                console.error('Error generating JSON example:', error);
+                return '{\n  "error": "Could not generate example"\n}';
+            }
+        }
+
+        // ===================================================================
+        // Generate Clean JSON Example (without comments)
+        // ===================================================================
+        function generateCleanJsonExample(jsonSchemaString) {
+            try {
+                const schema = JSON.parse(jsonSchemaString);
+                const example = {};
+                
+                for (const [key, value] of Object.entries(schema.properties)) {
+                    // Skip value fields (student doesn't need to fill these)
+                    if (key.includes('value_of_deal') || key.includes('total_points') || key.includes('total_value')) {
+                        continue;
+                    }
+                    
+                    // Generate example value based on type
+                    if (value.type === 'number') {
+                        example[key] = value.minimum || 0;
+                    } else if (value.type === 'string' && value.enum) {
+                        example[key] = value.enum[0];
+                    } else if (value.type === 'boolean') {
+                        example[key] = false;
+                    } else if (value.type === 'string') {
+                        example[key] = "...";
+                    } else {
+                        example[key] = null;
+                    }
+                }
+                
+                // Build clean example with $DEAL_REACHED$ token
+                const jsonString = JSON.stringify(example, null, 2);
+                return `$DEAL_REACHED$\n${jsonString}`;
+            } catch (error) {
+                console.error('Error generating clean example:', error);
+                return '$DEAL_REACHED$\n{}';
+            }
+        }
+
+        // ===================================================================
+        // Send Message
+        // ===================================================================
+        async function sendMessage() {
+            const message = elements.messageInput.value.trim();
+            
+            if (!message) {
+                return;
+            }
+            
+            if (!isNegotiationActive && !aiJustProposedDeal) {
+                addSystemMessage('⚠️ Negotiation has ended. Please start a new session.');
+                return;
+            }
+            
+            // Disable input while processing
+            elements.messageInput.disabled = true;
+            elements.sendBtn.disabled = true;
+            
+            // Add student message to chat
+            addMessage('student', message);
+            
+            // Clear input
+            elements.messageInput.value = '';
+            
+            // Show "AI is thinking..." message
+            const thinkingId = addThinkingMessage();
+            
+            try {
+                const response = await fetch(`${API_BASE}/negotiation/${currentSessionId}/message`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message })
+                });
+                
+                // Remove thinking message
+                removeThinkingMessage(thinkingId);
+                
+                if (!response.ok) {
+                    // Handle specific HTTP status codes
+                    if (response.status === 504) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.detail || 'Request timed out. The AI model took too long to respond. Please try a faster model like Grok-3.');
+                    }
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Update round display FIRST (before any early returns)
+                if (data.round) {
+                    const totalRounds = parseInt(elements.roundDisplay.textContent.split('/')[1]);
+                    elements.roundDisplay.textContent = `${data.round}/${totalRounds}`;
+                }
+                
+                // Handle system_message if present
+                if (data.system_message) {
+                    addSystemMessage(data.system_message);
+                }
+                
+                // Check for deal reached FIRST
+                if (data.deal_reached) {
+                    handleDealReached(data);
+                    return;
+                }
+                
+                // Handle terms mismatch
+                if (data.terms_mismatch) {
+                    endNegotiationSession();
+                    return;
+                }
+                
+                // Handle misunderstanding
+                if (data.misunderstanding) {
+                    // Show AI's message if present
+                    if (data.ai_message && !data.ai_message.includes('$DEAL_MISUNDERSTANDING$')) {
+                        addMessage('ai', data.ai_message);
+                    }
+                    endNegotiationSession();
+                    return;
+                }
+                
+                // Handle invalid response (AI proposed deal, student must accept/reject)
+                if (data.invalid_response) {
+                    // Re-enable input with restricted placeholder
+                    elements.messageInput.disabled = false;
+                    elements.sendBtn.disabled = false;
+                    elements.messageInput.placeholder = "Type $DEAL_REACHED$ + JSON terms, or $DEAL_MISUNDERSTANDING$";
+                    elements.messageInput.focus();
+                    return;
+                }
+                
+                // Handle deal failed
+                if (data.deal_failed) {
+                    handleDealFailed(data);
+                    return;
+                }
+                
+                // Handle negotiation ended (max rounds)
+                if (data.negotiation_ended) {
+                    handleNegotiationEnded(data.reason, data);
+                    return;
+                }
+                
+                // Check if AI proposed a deal
+                // Must be at the START of the message (after trimming)
+                const trimmedAiMessage = data.ai_message?.trim();
+                if (trimmedAiMessage?.startsWith('$DEAL_REACHED$')) {
+                    aiJustProposedDeal = true; // Set flag
+                    
+                    // Show AI's message
+                    addMessage('ai', data.ai_message);
+                    
+                    // v3: Show different instruction based on overtime status
+                    if (data.allow_overtime) {
+                        showOvertimeDealInstruction(data.ai_deal_terms);
+                    } else {
+                        showAiDealProposalInstruction(data.ai_deal_terms);
+                    }
+                    
+                    // Change placeholder to guide student
+                    elements.messageInput.placeholder = "Type $DEAL_REACHED$ + JSON terms, or $DEAL_MISUNDERSTANDING$";
+                    
+                    // Re-enable input
+                    elements.messageInput.disabled = false;
+                    elements.sendBtn.disabled = false;
+                    elements.messageInput.focus();
+                    return;
+                }
+                
+                // Normal AI response
+                if (data.ai_message) {
+                    addMessage('ai', data.ai_message);
+                    aiJustProposedDeal = false; // Reset flag
+                }
+                
+                // Re-enable input
+                elements.messageInput.disabled = false;
+                elements.sendBtn.disabled = false;
+                elements.messageInput.placeholder = "Type your negotiation message here...";
+                elements.messageInput.focus();
+                
+            } catch (error) {
+                console.error('Error sending message:', error);
+                removeThinkingMessage(thinkingId);
+                
+                // Display detailed error message
+                let errorMsg = '❌ Error sending message. ';
+                if (error.message) {
+                    errorMsg += error.message;
+                }
+                if (error.response) {
+                    errorMsg += ` (Status: ${error.response.status})`;
+                }
+                addSystemMessage(errorMsg);
+                console.error('Full error details:', error);
+                
+                // Re-enable input
+                elements.messageInput.disabled = false;
+                elements.sendBtn.disabled = false;
+            }
+        }
+
+        // ===================================================================
+        // v3: Show AI Deal Proposal Instruction (UPDATED)
+        // ===================================================================
+        function showAiDealProposalInstruction(aiDealTerms) {
+            // v3: Filter out private value fields
+            const privateFields = [
+                'total_value_of_deal_to_me'
+            ];
+            const publicTerms = Object.fromEntries(
+                Object.entries(aiDealTerms).filter(([key]) => !privateFields.includes(key))
+            );
+            const simpleExample = JSON.stringify(publicTerms, null, 2);
+            
+            const instructionHtml = `
+                <strong>🤖 Review AI's Proposed Terms</strong>
+                <p style="margin-top: 8px; color: var(--text-secondary);">
+                    The AI has proposed a deal. Review the terms carefully above.
+                </p>
+                
+                <h4 style="margin-top: 12px; color: var(--primary-blue);">📋 Your Options:</h4>
+                
+                <div style="background: var(--deal-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <strong>Option 1: Accept (if terms match your most recent offer)</strong>
+                    <p style="margin-top: 8px; font-size: 13px; color: var(--text-secondary);">
+                        Send this exact message:
+                    </p>
+                    <pre style="background: rgba(0,0,0,0.05); padding: 8px; border-radius: 4px; font-size: 11px; margin-top: 4px;">$DEAL_REACHED$
+${simpleExample}</pre>
+                    <p style="margin-top: 4px; font-size: 12px; color: var(--text-secondary);">
+                        Copy and paste the entire message above.
+                    </p>
+                </div>
+                
+
+                <div style="background: var(--system-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <strong>Option 2: Reject (if terms don't match)</strong>
+                    <p style="margin-top: 8px; font-size: 13px; color: var(--text-secondary);">
+                        Send this exact message:
+                    </p>
+                    <pre style="background: rgba(0,0,0,0.05); padding: 8px; border-radius: 4px; font-size: 11px; margin-top: 4px;">$DEAL_MISUNDERSTANDING$</pre>
+                </div>
+                
+                <p style="margin-top: 12px; font-weight: 600; color: var(--warning-yellow); font-size: 12px;">
+                    ⚠️ You cannot continue negotiating after AI proposes a deal. You must choose one of the above options.
+                </p>
+            `;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message system';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = 'ℹ️';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = instructionHtml;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            
+            elements.messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // ===================================================================
+        // v3: Show Overtime Deal Instruction (for final round deals)
+        // ===================================================================
+        function showOvertimeDealInstruction(aiDealTerms) {
+            // v3: Filter out private value fields
+            const privateFields = [
+                'total_value_of_deal_to_me'
+            ];
+            const publicTerms = Object.fromEntries(
+                Object.entries(aiDealTerms).filter(([key]) => !privateFields.includes(key))
+            );
+            const simpleExample = JSON.stringify(publicTerms, null, 2);
+            
+            const totalRounds = parseInt(elements.roundDisplay.textContent.split('/')[1]);
+            
+            const instructionHtml = `
+                <strong>🤖 AI has proposed a deal in the final round!</strong>
+                
+                <div style="background: var(--warning-yellow); padding: 12px; border-radius: 8px; margin-top: 12px;">
+                    <strong>⏱️ Overtime Allowed</strong>
+                    <p style="margin-top: 4px; font-size: 13px;">
+                        Although the ${totalRounds} rounds are complete, you have <strong>ONE final chance</strong> 
+                        to accept or reject this deal. No further negotiation is possible.
+                    </p>
+                </div>
+                
+                <h4 style="margin-top: 12px; color: var(--primary-blue);">📋 Your Options:</h4>
+                
+                <div style="background: var(--deal-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <strong>Option 1: Accept</strong>
+                    <p style="margin-top: 8px; font-size: 13px; color: var(--text-secondary);">
+                        Send this exact message:
+                    </p>
+                    <pre style="background: rgba(0,0,0,0.05); padding: 8px; border-radius: 4px; font-size: 11px; margin-top: 4px;">$DEAL_REACHED$
+${simpleExample}</pre>
+                    <p style="margin-top: 4px; font-size: 12px; color: var(--text-secondary);">
+                        Copy and paste the entire message above.
+                    </p>
+                </div>
+
+                <div style="background: var(--system-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">
+                    <strong>Option 2: Reject</strong>
+                    <p style="margin-top: 8px; font-size: 13px; color: var(--text-secondary);">
+                        Send this exact message:
+                    </p>
+                    <pre style="background: rgba(0,0,0,0.05); padding: 8px; border-radius: 4px; font-size: 11px; margin-top: 4px;">$DEAL_MISUNDERSTANDING$</pre>
+                </div>
+            `;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message system';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = 'ℹ️';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = instructionHtml;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            
+            elements.messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // ===================================================================
+        // Add Thinking Message
+        // ===================================================================
+        function addThinkingMessage() {
+            const id = 'thinking-' + Date.now();
+            
+            // Different tips based on M+P settings
+            let tips;
+            if (elements.useMemory.checked || elements.usePlan.checked) {
+                tips = [
+                    "AI is analyzing your offer",
+                    "AI is considering the negotiation history",
+                    "AI is formulating a strategic response"
+                ];
+            } else {
+                tips = [
+                    "AI is thinking",
+                    "AI is generating response",
+                    "AI is processing"
+                ];
+            }
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.id = id;
+            messageDiv.className = 'message thinking ai';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = '🤖';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            const textDiv = document.createElement('div');
+            textDiv.className = 'message-text';
+            textDiv.innerHTML = `<span id="${id}-text">${tips[0]}</span><span class="thinking-dots"></span>`;
+            
+            contentDiv.appendChild(textDiv);
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            
+            elements.messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+            
+            // Rotate tips every 6 seconds
+            let tipIndex = 0;
+            const intervalId = setInterval(() => {
+                tipIndex = (tipIndex + 1) % tips.length;
+                const textElement = document.getElementById(`${id}-text`);
+                if (textElement) {
+                    textElement.textContent = tips[tipIndex];
+                }
+            }, 6000);
+            
+            return { id, intervalId };
+        }
+
+        // ===================================================================
+        // UPDATED: Remove Thinking Message (clear interval)
+        // ===================================================================
+        function removeThinkingMessage(thinkingData) {
+            if (!thinkingData) return;
+            
+            const { id, intervalId } = thinkingData;
+            
+            // Clear the interval if it exists
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+            
+            // Remove the element
+            const element = document.getElementById(id);
+            if (element) {
+                element.remove();
+            }
+        }
+
+        // ===================================================================
+        // Handle Deal Reached
+        // ===================================================================
+        function handleDealReached(data) {
+            if (data.deal_terms) {
+                const termsHtml = `
+                    <strong>✅ Final Deal Terms:</strong>
+                    <pre>${JSON.stringify(data.deal_terms, null, 2)}</pre>
+                `;
+                addDealMessage(termsHtml);
+            }
+            
+            endNegotiationSession();
+        }
+
+        // ===================================================================
+        // Handle Deal Failed
+        // ===================================================================
+        function handleDealFailed(data) {
+            if (data.ai_message && !data.ai_message.includes('$DEAL_FAILED$')) {
+                addMessage('ai', data.ai_message);
+            }
+            endNegotiationSession();
+        }
+
+        // ===================================================================
+        // Handle Negotiation Ended (Max Rounds)
+        // ===================================================================
+        function handleNegotiationEnded(reason, data) {
+            if (data.ai_message) {
+                addMessage('ai', data.ai_message);
+            }
+            endNegotiationSession();
+        }
+
+        // ===================================================================
+        // End Negotiation Session
+        // ===================================================================
+        function endNegotiationSession() {
+            isNegotiationActive = false;
+            aiJustProposedDeal = false;
+            elements.messageInput.disabled = true;
+            elements.sendBtn.disabled = true;
+            elements.statusDisplay.textContent = 'Completed';
+            elements.statusDisplay.classList.remove('active');
+            elements.statusDisplay.classList.add('success-text');
+            
+            // Change end button to feedback button (but hide it)
+            elements.endBtn.textContent = 'Get Feedback';
+            elements.endBtn.onclick = getFeedback;
+            elements.endBtn.disabled = false; // Re-enable for feedback
+            elements.endBtn.style.display = 'none'; // Hide feedback button
+            
+            // Initialize feedback flag
+            elements.endBtn.dataset.feedbackGenerated = 'false';
+        }
+
+        // ===================================================================
+        // v4: Get Feedback (FIXED double-click prevention + Dynamic message)
+        // ===================================================================
+        async function getFeedback() {
+            if (!currentSessionId) {
+                return;
+            }
+            
+            // v4: Check if already generated OR currently generating
+            if (elements.endBtn.dataset.feedbackGenerated === 'true') {
+                addSystemMessage('ℹ️ Feedback has already been generated. Scroll up to view it.');
+                return;
+            }
+            
+            // v4: Check if already in progress (prevent double-click)
+            if (elements.endBtn.dataset.feedbackInProgress === 'true') {
+                return;
+            }
+            
+            // v4: Set in-progress flag IMMEDIATELY to prevent double-click
+            elements.endBtn.dataset.feedbackInProgress = 'true';
+            elements.endBtn.disabled = true;
+            elements.endBtn.textContent = 'Generating...';
+            
+            // Add dynamic feedback message (like thinking message)
+            const feedbackThinkingId = addFeedbackThinkingMessage();
+            
+            try {
+                const response = await fetch(`${API_BASE}/negotiation/${currentSessionId}/feedback`);
+                
+                // Remove thinking message
+                removeThinkingMessage(feedbackThinkingId);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to generate feedback');
+                }
+                
+                const data = await response.json();
+                
+                // Display feedback
+                const feedbackHtml = `<strong>Negotiation Feedback</strong>
+                <div style="margin-top: 12px; white-space: pre-wrap; line-height: 1.8;">${escapeHtml(data.feedback)}</div>`;
+                addDealMessage(feedbackHtml);
+                
+                addSystemMessage('✅ Feedback generated! Scroll up to read your detailed performance analysis.');
+                
+                // v4: Mark as completed
+                elements.endBtn.dataset.feedbackGenerated = 'true';
+                elements.endBtn.dataset.feedbackInProgress = 'false';
+                elements.endBtn.textContent = 'Feedback Generated';
+                elements.endBtn.disabled = true;
+                
+            } catch (error) {
+                console.error('Error getting feedback:', error);
+                removeThinkingMessage(feedbackThinkingId);
+                addSystemMessage('❌ Error generating feedback. Please try again.');
+                
+                // v4: Reset in-progress flag on error, allow retry
+                elements.endBtn.dataset.feedbackInProgress = 'false';
+                elements.endBtn.disabled = false;
+                elements.endBtn.textContent = 'Retry Feedback';
+            }
+        }
+
+        // ===================================================================
+        // Add Feedback Thinking Message (Dynamic)
+        // ===================================================================
+        function addFeedbackThinkingMessage() {
+            const id = 'feedback-thinking-' + Date.now();
+            
+            const tips = [
+                "Analyzing your negotiation performance",
+                "Reviewing your strategy and tactics",
+                "Evaluating deal outcomes",
+                "Generating personalized insights"
+            ];
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.id = id;
+            messageDiv.className = 'message thinking system';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = 'ℹ️';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            const textDiv = document.createElement('div');
+            textDiv.className = 'message-text';
+            textDiv.innerHTML = `<span id="${id}-text">${tips[0]}</span><span class="thinking-dots"></span>`;
+            
+            contentDiv.appendChild(textDiv);
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            
+            elements.messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+            
+            // Rotate tips every 6 seconds
+            let tipIndex = 0;
+            const intervalId = setInterval(() => {
+                tipIndex = (tipIndex + 1) % tips.length;
+                const textElement = document.getElementById(`${id}-text`);
+                if (textElement) {
+                    textElement.textContent = tips[tipIndex];
+                }
+            }, 6000);
+            
+            return { id, intervalId };
+        }
+
+        // ===================================================================
+        // End Negotiation (Manual)
+        // ===================================================================
+        async function endNegotiation() {
+            if (!currentSessionId) {
+                return;
+            }
+            
+            if (isNegotiationActive) {
+                const confirm = window.confirm('Are you sure you want to end this negotiation early? You can still get feedback.');
+                if (!confirm) {
+                    return;
+                }
+                
+                // Mark as manually ended
+                isNegotiationActive = false;
+                aiJustProposedDeal = false;
+                elements.messageInput.disabled = true;
+                elements.sendBtn.disabled = true;
+                elements.statusDisplay.textContent = 'Ended Early';
+                elements.statusDisplay.classList.remove('active');
+                elements.statusDisplay.classList.add('warning-text');
+                
+                addSystemMessage('⚠️ Negotiation ended early. Click "Get Feedback" to see your performance analysis.');
+                
+                // Change button to feedback (but hide it)
+                elements.endBtn.textContent = 'Get Feedback';
+                elements.endBtn.onclick = getFeedback;
+                elements.endBtn.disabled = false;
+                elements.endBtn.style.display = 'none'; // Hide feedback button
+            } else {
+                // Already ended, act as feedback button
+                await getFeedback();
+            }
+        }
+
+        // ===================================================================
+        // Reset to Scenario Screen
+        // ===================================================================
+        function resetToScenarioScreen() {
+            if (isNegotiationActive) {
+                const confirm = window.confirm('This will end your current negotiation. Continue?');
+                if (!confirm) {
+                    return;
+                }
+            }
+            
+            // Reset state
+            currentSessionId = null;
+            currentScenarioName = null;
+            currentStudentRole = null;
+            isNegotiationActive = false;
+            aiJustProposedDeal = false;
+            
+            // Switch screens
+            elements.chatScreen.classList.add('hidden');
+            elements.scenarioScreen.classList.remove('hidden');
+            
+            // Re-enable start button
+            elements.startBtn.disabled = false;
+            elements.loadingMessage.classList.add('hidden');
+            
+            // Reset end button
+            elements.endBtn.textContent = 'End';
+            elements.endBtn.onclick = endNegotiation;
+            elements.endBtn.dataset.feedbackGenerated = 'false';
+        }
+
+        // ===================================================================
+        // Add Message to Chat
+        // ===================================================================
+        function addMessage(type, content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            
+            if (type === 'student') {
+                avatar.textContent = '👤';
+            } else if (type === 'ai') {
+                avatar.textContent = '🤖';
+            } else if (type === 'system') {
+                avatar.textContent = 'ℹ️';
+            }
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            // Check if content contains JSON (for deal proposals)
+            if (content.includes('{') && content.includes('}')) {
+                // Try to format JSON nicely
+                const jsonMatch = content.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    try {
+                        const jsonObj = JSON.parse(jsonMatch[0]);
+                        const beforeJson = content.substring(0, content.indexOf(jsonMatch[0]));
+                        const afterJson = content.substring(content.indexOf(jsonMatch[0]) + jsonMatch[0].length);
+                        
+                        contentDiv.innerHTML = `
+                            <div class="message-text">${escapeHtml(beforeJson)}</div>
+                            <pre>${JSON.stringify(jsonObj, null, 2)}</pre>
+                            <div class="message-text">${escapeHtml(afterJson)}</div>
+                        `;
+                    } catch (e) {
+                        contentDiv.innerHTML = `<div class="message-text">${escapeHtml(content)}</div>`;
+                    }
+                } else {
+                    contentDiv.innerHTML = `<div class="message-text">${escapeHtml(content)}</div>`;
+                }
+            } else {
+                contentDiv.innerHTML = `<div class="message-text">${escapeHtml(content)}</div>`;
+            }
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            
+            elements.messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // ===================================================================
+        // Add System Message
+        // ===================================================================
+        function addSystemMessage(content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message system';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = 'ℹ️';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = content; // Allow HTML for rich formatting
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            
+            elements.messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // ===================================================================
+        // Add Deal Message (Special formatting)
+        // ===================================================================
+        function addDealMessage(htmlContent) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message deal';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = '🤝';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = htmlContent;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            
+            elements.messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // ===================================================================
+        // Scroll to Bottom
+        // ===================================================================
+        function scrollToBottom() {
+            elements.messagesContainer.scrollTop = elements.messagesContainer.scrollHeight;
+        }
+
+        // ===================================================================
+        // Handle Keyboard Shortcuts
+        // ===================================================================
+        function handleKeyboardShortcut(e) {
+            // Ctrl/Cmd + Enter to send
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // ===================================================================
+        // Show Error
+        // ===================================================================
+        function showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.classList.remove('hidden');
+        }
+
+        // ===================================================================
+        // Hide Error
+        // ===================================================================
+        function hideError(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.add('hidden');
+        }
+
+        // ===================================================================
+        // Escape HTML
+        // ===================================================================
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ===================================================================
+        // Initialize on Page Load
+        // ===================================================================
+        window.addEventListener('DOMContentLoaded', init);
+
+        // ===================================================================
+        // Modal Timer Variable
+        // ===================================================================
+        let modal2Timer = null;
+
+        function openHelpModal() {
+            showInstructionsModal(false); // No timer when opening from Help button
+        }
+
+        // Close modal on outside click - DISABLED for timed modals
+        document.addEventListener('click', (e) => {
+            // Modal outside click handling disabled for consent flow
+            return;
+        });
+
+        // Close modal on ESC key - DISABLED for timed modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                // Allow closing role preview modal
+                const rolePreviewModal = document.getElementById('rolePreviewModal');
+                if (rolePreviewModal && rolePreviewModal.classList.contains('show')) {
+                    closeRolePreviewModal();
+                }
+            }
+        });
+
+        // ===================================================================
+        // Modal 2: Negotiation Instructions (45s timer)
+        // ===================================================================
+        function showNegotiationModal() {
+            const modal = document.getElementById('negotiationModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            
+            // Update total rounds display
+            const totalRoundsSpan = document.getElementById('modalTotalRounds');
+            if (totalRoundsSpan) {
+                const totalRoundsValue = parseInt(elements.totalRoundsInput.value) || 6;
+                totalRoundsSpan.textContent = totalRoundsValue;
+            }
+            
+            // Start 30 second timer
+            let timeLeft = 30;
+            const timerElement = document.getElementById('modal2Timer');
+            const nextBtn = document.getElementById('modal2NextBtn');
+            nextBtn.disabled = true;
+            timerElement.style.background = 'var(--warning-yellow)';
+            
+            modal2Timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = `${timeLeft}s`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(modal2Timer);
+                    nextBtn.disabled = false;
+                    timerElement.textContent = '✓';
+                    timerElement.style.background = 'var(--success-green)';
+                }
+            }, 1000);
+        }
+        
+        function closeNegotiationModal() {
+            const modal = document.getElementById('negotiationModal');
+            modal.classList.remove('show');
+            modal.classList.add('hidden');
+            if (modal2Timer) {
+                clearInterval(modal2Timer);
+                modal2Timer = null;
+            }
+        }
+        
+        function goToRolePreview() {
+            closeNegotiationModal();
+            showRolePreviewModal();
+        }
+        
+        // ===================================================================
+        // Modal 3: Role Preview (no timer)
+        // ===================================================================
+        function showRolePreviewModal() {
+            const modal = document.getElementById('rolePreviewModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            
+            // Load role info into modal
+            loadRolePreviewContent();
+        }
+        
+        function closeRolePreviewModal() {
+            const modal = document.getElementById('rolePreviewModal');
+            modal.classList.remove('show');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        
+        async function loadRolePreviewContent() {
+            try {
+                // Role info should already be loaded from startNegotiation
+                // Just populate the preview modal with the same data
+                const previewRoleLabel = document.getElementById('previewRoleLabel');
+                const previewBatna = document.getElementById('previewBatna');
+                const previewSystemPrompt = document.getElementById('previewSystemPrompt');
+                const previewContextPrompt = document.getElementById('previewContextPrompt');
+                
+                if (previewRoleLabel) previewRoleLabel.textContent = elements.roleLabel.textContent;
+                if (previewBatna) previewBatna.textContent = elements.batnaValue.textContent;
+                if (previewSystemPrompt) previewSystemPrompt.textContent = elements.systemPromptContent.textContent;
+                if (previewContextPrompt) previewContextPrompt.textContent = elements.contextPromptContent.textContent;
+            } catch (error) {
+                console.error('Error loading role preview:', error);
+            }
+        }
+        
+        function continueToNegotiation() {
+            closeRolePreviewModal();
+            // Modals are done, user can now start chatting
+            document.body.style.overflow = '';
+        }
+        
+        // ===================================================================
+        // Enter Chat Screen (separated from startNegotiation)
+        // ===================================================================
+        async function enterChatScreen() {
+            try {
+                const response = await fetch(`${API_BASE}/negotiation/${currentSessionId}/status`);
+                const data = await response.json();
+                
+                // Switch to chat screen
+                elements.scenarioScreen.classList.add('hidden');
+                elements.chatScreen.classList.remove('hidden');
+                
+                // Clear messages
+                elements.messagesContainer.innerHTML = '';
+                
+                // Show initial message
+                if (data.student_goes_first) {
+                    addSystemMessage(`Welcome! You will go first. Start the negotiation by typing your opening message.`);
+                } else {
+                    addSystemMessage(`Welcome! The AI will go first.`);
+                    
+                    // Show AI's first message from transcript
+                    if (data.transcript && data.transcript.length > 0) {
+                        // Extract the AI's message from "Round 1.1 - AI_LABEL: message" format
+                        const firstMessage = data.transcript[0];
+                        const match = firstMessage.match(/^Round \d+\.\d+ - .+?:\s(.+)$/s);
+                        if (match) {
+                            addMessage('ai', match[1]);
+                        }
+                    }
+                    
+                }
+                
+                // Update round display
+                elements.roundDisplay.textContent = `1/${data.total_rounds}`;
+                
+                // NOW show the modals AFTER chat screen is loaded
+                showNegotiationModal();
+                
+            } catch (error) {
+                console.error('Error entering chat screen:', error);
+                alert('Failed to load negotiation. Please try again.');
+            }
+        }
+
+        // Call checkShowInstructions when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            // Consent modal will be shown first instead of instructions
+            // checkShowInstructions();
+        });
+    </script>
+
+
+    <!-- ==================== Consent Modal - FIRST SCREEN ==================== -->
+    <div id="consentModal" class="modal" style="display: flex; align-items: center; justify-content: center;">
+        <div class="modal-content" style="max-width: 850px; max-height: 92vh;">
+            <div class="modal-header" style="border-bottom: 2px solid var(--border-color);">
+                <h2 style="font-size: 24px;">📋 Research Participation - Optional Negotiation Exercise</h2>
+            </div>
+            
+            <div class="modal-body" style="overflow-y: auto; max-height: calc(92vh - 200px); padding: 32px 40px;">
+                
+                <!-- Important Notice -->
+                <div style="background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 28px; border-left: 3px solid #d1d5db;">
+                    <p style="font-size: 16px; line-height: 1.7; color: #4b5563; margin: 0;">
+                        Your grade and standing in the course are not affected by your decision to participate or opt out.
+                    </p>
+                </div>
+
+
+                <!-- About This Exercise -->
+                <div style="margin-bottom: 28px;">
+                    <h3 style="font-size: 20px; margin-bottom: 14px; color: var(--primary-blue); display: flex; align-items: center; gap: 8px;">
+                        <span>📚</span> About This Exercise
+                    </h3>
+                    <p style="line-height: 1.8; color: var(--text-primary); margin-bottom: 14px; font-size: 15px;">
+                        As part of <strong>MGT 880 Sales and Negotiation: Figure Out the Other Side</strong>, you are invited to participate 
+                        in an optional research exercise examining how students negotiate with conversational AIs.
+                    </p>
+                    
+                    <div style="background: #f9fafb; border-radius: 10px; padding: 18px; margin-top: 14px;">
+                        <p style="line-height: 1.7; color: var(--text-primary); margin: 0 0 12px 0; font-weight: 600;">
+                            Your Options:
+                        </p>
+                        <ul style="margin: 0; padding-left: 24px; line-height: 2;">
+                            <li><strong>Opt-in:</strong> Complete one negotiation exercise with an AI chatbot</li>
+                            <li><strong>Opt-out:</strong> Complete an alternative written reflection on reading materials for full participation credit</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Privacy & Data Use -->
+                <div style="background: white; border: 2px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                    <h3 style="font-size: 20px; margin-bottom: 18px; color: var(--primary-blue); display: flex; align-items: center; gap: 8px;">
+                        <span>🔒</span> Privacy & Data Use
+                    </h3>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <div style="display: flex; gap: 12px;">
+                            <span style="color: var(--success-green); font-size: 20px; flex-shrink: 0;">✓</span>
+                            <div>
+                                <p style="line-height: 1.7; margin: 0; font-weight: 600;">The chatbot does not store or learn from your data</p>
+                                <p style="line-height: 1.6; color: var(--text-secondary); margin: 4px 0 0 0; font-size: 14px;">
+                                    Your conversation is not used to train AI models.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 12px;">
+                            <span style="color: var(--success-green); font-size: 20px; flex-shrink: 0;">✓</span>
+                            <div>
+                                <p style="line-height: 1.7; margin: 0; font-weight: 600;">Transcripts are de-identified before analysis</p>
+                                <p style="line-height: 1.6; color: var(--text-secondary); margin: 4px 0 0 0; font-size: 14px;">
+                                    Your identity will not be linked to your negotiation transcript.
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div style="display: flex; gap: 12px;">
+                            <span style="color: var(--success-green); font-size: 20px; flex-shrink: 0;">✓</span>
+                            <div>
+                                <p style="line-height: 1.7; margin: 0; font-weight: 600;">Demographic information is optional but encouraged</p>
+                                <p style="line-height: 1.6; color: var(--text-secondary); margin: 4px 0 0 0; font-size: 14px;">
+                                    You may choose not to disclose, but this information helps our research on negotiation patterns.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Consent Statement -->
+                <div style="background: #f9fafb; border-radius: 12px; padding: 24px; margin-bottom: 28px;">
+                    <h3 style="font-size: 20px; margin-bottom: 16px; color: var(--primary-blue); display: flex; align-items: center; gap: 8px;">
+                        <span>📝</span> Consent Statement
+                    </h3>
+                    <p style="line-height: 1.8; margin-bottom: 14px; font-size: 15px;">
+                        By selecting <strong>"I agree to participate"</strong> below, you indicate that you:
+                    </p>
+                    <ol style="margin: 0; padding-left: 24px; line-height: 2; font-size: 15px;">
+                        <li>Are enrolled in this course</li>
+                        <li>Understand that this exercise is voluntary and can be stopped at any time without penalty</li>
+                        <li>Understand that your negotiation transcript will be de-identified before analysis</li>
+                        <li>Understand that the chatbot does not retain or train on any data from this session</li>
+                        <li>
+                            Understand that your name will not be linked to your negotiation transcript.<br>
+                            You provide your name separately only for the instructor to record your completion.
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Choice Selection -->
+                <div style="border: 3px solid var(--primary-blue); border-radius: 12px; padding: 24px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);">
+                    <p style="margin: 0 0 18px 0; font-size: 16px; font-weight: 600; color: var(--primary-blue);">
+                        Please select one option:
+                    </p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        <label style="display: flex; align-items: start; gap: 14px; cursor: pointer; background: white; padding: 18px; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s;" class="consent-option">
+                            <input type="radio" name="consentChoice" value="optin" style="margin-top: 4px; width: 20px; height: 20px; cursor: pointer;">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; font-size: 16px; color: var(--primary-blue); margin-bottom: 4px;">
+                                    ✅ I agree to participate
+                                </div>
+                                <div style="color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                                    I will complete the AI negotiation exercise
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <label style="display: flex; align-items: start; gap: 14px; cursor: pointer; background: white; padding: 18px; border-radius: 10px; border: 2px solid transparent; transition: all 0.2s;" class="consent-option">
+                            <input type="radio" name="consentChoice" value="optout" style="margin-top: 4px; width: 20px; height: 20px; cursor: pointer;">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; font-size: 16px; color: var(--text-secondary); margin-bottom: 4px;">
+                                    📄 I prefer the alternative assignment
+                                </div>
+                                <div style="color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                                    I will complete the written reflection instead
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer" style="border-top: 2px solid var(--border-color); padding: 20px 40px;">
+                <p style="color: var(--text-secondary); font-size: 13px; margin: 0; flex: 1;">
+                    Questions? Contact the course instructor or the research team
+                </p>
+                <button class="btn-primary" id="consentContinueBtn" onclick="processConsent()" disabled style="min-width: 140px;">
+                    Continue →
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal 2: Negotiation Instructions (30s timer) -->
+    <div id="negotiationModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎯 Negotiation Guidelines</h2>
+                <span class="modal-timer" id="modal2Timer">30s</span>
+            </div>
+            
+            <div class="modal-body">
+                <section class="instruction-section">
+                    <h3>📋 Key Points</h3>
+                    
+                    <div class="instruction-item">
+                        <strong>1. Work Independently</strong>
+                        <p>Do not use AI tools (like ChatGPT) to help you negotiate. Rely on your own understanding of the negotiation scenario.</p>
+                    </div>
+
+                    <div class="instruction-item">
+                        <strong>2. Be Patient with AI Responses</strong>
+                        
+                        <p>Your assigned configuration may use one of two AI modes:</p>
+                        <ul style="margin-left: 20px; line-height: 1.6;">
+                            <li>
+                                <strong>Base Mode:</strong> About 1 minute per response
+                            </li>
+                            <li>
+                                <strong>Agent Mode:</strong>
+                                <ul style="margin-left: 20px; margin-top: 4px;">
+                                    <li>Single-issue scenarios: Average 2 minutes per response</li>
+                                    <li>Multi-issue scenarios: Average 3-4 minutes per response</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        
+                        <p>
+                            Please wait patiently while the AI is generating its message. 
+                            Do not refresh the page during this time.
+                        </p>
+
+                        <p style="margin-top: 10px;">
+                            If you encounter an error due to long processing time, record your messages,
+                            and start a new negotiation session.
+                            If the issue persists, please contact your instructor.
+                            (Don't worry — based on testing, this situation is very rare.)
+                        </p>
+                    </div>
+                    
+                    <div class="instruction-item important">
+                        <strong>3. Two Ways to Reach a Deal</strong>
+                        
+                        <p style="margin-top: 12px;"><strong>Option A: You accept the AI's offer</strong></p>
+                        <p>If you agree with the AI's most recent proposal, send:</p>
+                        <ul>
+                            <li><code>$DEAL_REACHED$</code> + the deal terms (matching the AI's proposal)</li>
+                            <li>Don't worry about the exact format. When you start negotiating, check the guide in the bottom right corner</li>
+                        </ul>
+                        
+                        <p style="margin-top: 12px;"><strong>Option B: AI accepts your offer</strong></p>
+                        <p>When the AI agrees with YOUR most recent proposal, it will send <code>$DEAL_REACHED$</code> + deal terms.</p>
+                        <p><strong>You must verify and respond:</strong></p>
+                        <ul>
+                            <li><strong>CONFIRM:</strong> If the AI's terms match your latest offer exactly, copy and paste the AI's entire message as your response</li>
+                            <li><strong>REJECT:</strong> If the AI's terms don't match your latest offer, respond with:<br>
+                            <code>$DEAL_MISUNDERSTANDING$</code></li>
+                            <li>Don't worry. When verification is needed, the chat interface will provide specific instructions on how to proceed</li>
+                        </ul>
+                    </div>
+
+                    <div class="instruction-item">
+                        <strong>4. Plan Strategically</strong>
+                        <ul style="line-height: 1.7;">
+                            <li>You have only <span id="modalTotalRounds">6</span> rounds total</li>
+                            <li>Each round = both parties send one message each</li>
+                            <li>If neither you nor the AI sends the <code>$DEAL_REACHED$</code> token by the end of the last round, no deal will have been reached and you will get your BATNA</li>
+                            <li>Make each round count—don't waste turns with trivial messages</li>
+                        </ul>
+                    </div>
+                </section>
+            </div> 
+            <div class="modal-footer">
+                <div></div>
+                <button class="btn-primary" id="modal2NextBtn" onclick="goToRolePreview()">
+                    Next: Preview Your Role →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Role Preview (no timer) - LARGER SIZE -->
+    <div id="rolePreviewModal" class="modal hidden">
+        <div class="modal-content" style="max-width: 900px; max-height: 90vh;">
+            <div class="modal-header">
+                <h2>🎭 Your Role Information</h2>
+                <button class="modal-close" onclick="closeRolePreviewModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body" style="padding: 24px 40px;">
+                <p style="margin-bottom: 24px; color: var(--text-secondary); font-size: 15px;">
+                    This information will be displayed on the right side when you start negotiating, so you can reference it at any time. However, we recommend reading it carefully now when the content is most convenient to review. This information is confidential—the AI cannot see it.
+                </p>
+
+                <div style="background: var(--bg-gray); padding: 12px 16px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid var(--primary-blue);">
+                    <h3 style="font-size: 15px; margin-bottom: 6px; color: var(--primary-blue);">🎭 Role</h3>
+                    <p style="font-size: 15px; font-weight: 600; color: var(--text-primary);" id="previewRoleLabel">Loading...</p>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid var(--success-green);">
+                    <h3 style="font-size: 15px; margin-bottom: 6px; color: #065f46;">💰 Your BATNA</h3>
+                    <p style="font-size: 15px; font-weight: 600; color: #065f46;" id="previewBatna">Loading...</p>
+                </div>
+
+                <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color);">
+                    <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--primary-blue);">📋 Rules & Objectives</h3>
+                    <div id="previewSystemPrompt" style="font-size: 14px; line-height: 1.8; color: var(--text-primary); max-height: 350px; overflow-y: auto; white-space: pre-wrap;">Loading...</div>
+                </div>
+
+                <div style="background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+                    <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--primary-blue);">📖 Scenario Details</h3>
+                    <div id="previewContextPrompt" style="font-size: 14px; line-height: 1.8; color: var(--text-primary); max-height: 350px; overflow-y: auto; white-space: pre-wrap;">Loading...</div>
+                </div>
+                
+            </div>
+            
+            <div class="modal-footer">
+                <div></div>
+                <button class="btn-primary" onclick="continueToNegotiation()">
+                    Continue →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ==================== Handle "Other" option visibility ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gender Other
+        document.getElementById('gender').addEventListener('change', function() {
+            const otherBox = document.getElementById('genderOther');
+            if (this.value === 'Other') {
+                otherBox.classList.remove('hidden');
+            } else {
+                otherBox.classList.add('hidden');
+                otherBox.value = '';
+            }
+        });
+    });
+
+    // ==================== Consent Form Handling ====================
+    
+    // Enable continue button when choice is made
+    document.querySelectorAll('input[name="consentChoice"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            document.getElementById('consentContinueBtn').disabled = false;
+        });
+    });
+
+    function processConsent() {
+        const choice = document.querySelector('input[name="consentChoice"]:checked');
+        
+        if (!choice) {
+            alert('Please select an option to continue');
+            return;
+        }
+        
+        if (choice.value === 'optout') {
+            // Show opt-out message
+            document.body.innerHTML = `
+                <div style="max-width: 700px; margin: 100px auto; padding: 50px; background: white; border-radius: 16px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                    <div style="font-size: 48px; margin-bottom: 20px;">📋</div>
+                    <h2 style="margin-bottom: 24px; color: var(--text-primary);">Thank you for your response</h2>
+                    <p style="line-height: 1.8; margin-bottom: 20px; color: var(--text-secondary); font-size: 16px;">
+                        You have chosen to opt out of the AI negotiation exercise.
+                    </p>
+                    <p style="line-height: 1.8; margin-bottom: 30px; color: var(--text-secondary); font-size: 16px;">
+                        Please contact <strong>the course instructor</strong> for information about the alternative assignment.
+                    </p>
+                    <div style="padding: 20px; background: #f9fafb; border-radius: 12px; border: 1px solid var(--border-color);">
+                        <p style="color: #666; margin: 0; font-size: 14px;">
+                            You may now close this window.
+                        </p>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+        
+        // If opt-in, hide consent modal and show scenario screen
+        document.getElementById('consentModal').style.display = 'none';
+    }
+    </script>
+
+</body>
+</html>
